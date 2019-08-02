@@ -1,0 +1,77 @@
+language: c
+dist: xenial
+cache:
+  apt: true
+  ccache: true
+  directories:
+    - '$HOME/.sonar/cache'
+git:
+  depth: false
+
+addons:
+  apt:
+    packages:
+    - libgl1-mesa-dev
+    - libmirclient-dev
+    - libwayland-dev
+    - libx11-xcb-dev
+    - libxcursor-dev
+    - libxi-dev
+    - libxinerama-dev
+    - libxkbcommon-dev
+    - libxrandr-dev
+  sonarcloud:
+    organization: "souryogurt-github"
+    token:
+      secure: "pJ2qdcn9DAKa5UU1glxBZxbAY8RadI3nd9RF986jvMP1HDFX377N/uZpv6gPx33I4O+/yyib6RPeQ9CO23Psu4zlxhJFPAsOJ034JExlSz5Q2rdkiwUdNQ09hZKA59R8UXw2RK7PqBvLGSqtt3ovbKevI/4tAmId7sr32FSMee9HxE5Xmjz0XBOTg2F43q6gTvPxorPoZHsTrIU1hotxuyPFv9IcCso043bRYeIVMAGoPHn9i/mT4m84yU7rHboJkPChu9u2Yw+ZD1ubmLivF1ustUP/5TrH+MXhCbEa1fyKfJEXhR5bJcO4g7hr3qu+zdfFGC/8C+atUOH+b4IfvJcfDSRgL0I8ewAqFdHs71wd9DL5aoFEQUI2aYWd7+vQgYOS8ezPqu5uJEyWBUlMk5JH4G0ZVEAtTPA9zbl25MqhCI2ShHNkvqOEBmQCe4BDDsoy1/lrzbiWYTBbrloIEitN1HJ6f9rprhlERnmsNBHO9RjnWhgT9z2pnIA+8afE1ZSGM5f2AJyyuRw/I02YHrKSiiil/faRHYw6dp6tz2QjWNObFshkXC9qTzNRFncIqtPVp0ag+PHhv+KkgOZBxDJlKM7IYA+8x/+fqsd6SRQU0mPCyyEbfBas9vSO+Udu8r9zGzo/zZ9n8f/WkQWGFW7sXUlHhuRDnSxVlmC9rsQ="
+
+env:
+  global:
+    - LD_LIBRARY_PATH=${TRAVIS_BUILD_DIR}/../local/lib:${LD_LIBRARY_PATH}
+
+install:
+    - |
+        cd ${TRAVIS_BUILD_DIR}/..
+        mkdir -p local/share
+        cd local/share
+        echo "CPPFLAGS=-I${TRAVIS_BUILD_DIR}/../local/include" >> config.site
+        echo "LDFLAGS=-L${TRAVIS_BUILD_DIR}/../local/lib" >> config.site
+        cd ${TRAVIS_BUILD_DIR}
+    - |
+        cd vendor/vulkan-headers
+        mkdir build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/../local ..
+        make -j $core_count install
+        cd ${TRAVIS_BUILD_DIR}
+    - |
+        cd vendor/vulkan-loader
+        mkdir build
+        cd build
+        cmake -DVULKAN_HEADERS_INSTALL_DIR=${TRAVIS_BUILD_DIR}/../local -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/../local -DBUILD_WSI_WAYLAND_SUPPORT=OFF -DBUILD_WSI_XLIB_SUPPORT=OFF -DBUILD_TESTS=OFF ..
+        make -j $core_count install
+        cd ${TRAVIS_BUILD_DIR}
+    - |
+        cd vendor/glfw
+        mkdir build
+        cd build
+        cmake -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/../local ..
+        make -j $core_count install
+        cd ${TRAVIS_BUILD_DIR}
+    - |
+        cd vendor/cgreen
+        mkdir build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/../local -DGITDIR=../../../.git/modules/cgreen ..
+        make -j $core_count install
+        cd ${TRAVIS_BUILD_DIR}
+
+before_script: autoreconf -i
+
+script:
+    - CPPFLAGS="-I/usr/include" CFLAGS="--std=gnu11 -Wall -Wextra --coverage" ./configure --enable-samples --enable-unit-tests --prefix=${TRAVIS_BUILD_DIR}/../local
+    - VERBOSE=1 build-wrapper-linux-x86-64 --out-dir bw-output make check
+    - find . -path ./vendor -prune -o -name '*.o' -print0 | xargs -0 gcov -a -c
+    - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+    - git fetch origin
+    - sonar-scanner
