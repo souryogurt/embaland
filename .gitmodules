@@ -1,0 +1,17 @@
+[submodule "vulkan-headers"]
+	path = vendor/vulkan-headers
+	url = https://github.com/KhronosGroup/Vulkan-Headers.git
+	shallow = true
+[submodule "vulkan-loader"]
+	path = vendor/vulkan-loader
+	url = https://github.com/KhronosGroup/Vulkan-Loader.git
+	shallow = true
+[submodule "cgreen"]
+	path = vendor/cgreen
+	url = https://github.com/cgreen-devs/cgreen.git
+	shallow = true
+[submodule "glfw"]
+	path = vendor/glfw
+	url = https://github.com/glfw/glfw.git
+	branch = 3.3-stable
+	shallow = true
