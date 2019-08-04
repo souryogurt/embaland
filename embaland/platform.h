@@ -8,13 +8,13 @@
  */
 
 /**
- * @def EMB_DLL
- * Must be defined by applications that are linking against the DLL version of
- * the embaland library
+ * @def EMB_STATIC
+ * Must be defined by applications that are linking against the static version
+ * of the embaland library
  */
 
-#if defined(EMB_DLL) && defined(_EMB_BUILD_DLL)
-#error "You must not have both EMB_DLL and _EMB_BUILD_DLL defined"
+#if defined(EMB_STATIC) && defined(_EMB_BUILD_DLL)
+#error "You must not have both EMB_STATIC and _EMB_BUILD_DLL defined"
 #endif
 
 /**
@@ -33,7 +33,7 @@
 /* We are building embaland as a Win32 DLL */
 #define EMB_API __declspec(dllexport)
 #define EMB_LOCAL
-#elif (defined(_WIN32) || defined(__CYGWIN__)) && defined(EMB_DLL)
+#elif (defined(_WIN32) || defined(__CYGWIN__)) && !defined(EMB_STATIC)
 /* We are calling embaland as Win32 DLL */
 #define EMB_API __declspec(dllimport)
 #define EMB_LOCAL

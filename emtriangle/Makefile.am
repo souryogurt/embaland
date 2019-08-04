@@ -1,4 +1,4 @@
-noinst_PROGRAMS += emtriangle/emtriangle
+bin_PROGRAMS += emtriangle/emtriangle
 emtriangle_emtriangle_SOURCES = emtriangle/entry.c
 emtriangle_emtriangle_LDADD = emtriangle/libemtriangle.la\
 			      libembaland.la $(GLFW_LIBS) $(VULKAN_LIBS)
