@@ -32,3 +32,9 @@ EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport)
 {
 	mock(viewport);
 }
+
+EMB_API enum emb_result EMB_CALL emb_viewport_render(emb_viewport viewport,
+						     uint64_t timeout)
+{
+	return (enum emb_result)mock(viewport, timeout);
+}

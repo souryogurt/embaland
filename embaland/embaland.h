@@ -28,7 +28,7 @@ extern "C" {
  * Create embaland instance.
  * @param vulkan is the handle of the vulkan instance to use
  * @param[out] embaland points a emb_instance handle in which the resulting instance is returned
- * @returns EMB_SUCCESS on success, or emb_result error otherwise
+ * @retval EMB_SUCCESS embaland instance succefully created
  */
 EMB_API enum emb_result EMB_CALL emb_create(VkInstance vulkan,
 					    emb_instance *embaland);
@@ -45,7 +45,7 @@ EMB_API void EMB_CALL emb_destroy(emb_instance embaland);
  * @param surface is vulkan surface to create viewport on
  * @param[out] viewport points a emb_viewport handle in which the resulting
  *                      viewport is returned
- * @returns EMB_SUCCESS on success, or emb_result error otherwise
+ * @retval EMB_SUCCESS viewport succefully created
  */
 EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
 						     VkSurfaceKHR surface,
@@ -56,6 +56,14 @@ EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
  * @param viewport is the handle of the viewport to destroy
  */
 EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport);
+
+/** Render viewport.
+ * @param viewport is handle of the viewport to render
+ * @param timeout specifies how long the function can wait in nanoseconds
+ * @retval EMB_SUCCESS viewport is successfully rendered
+ */
+EMB_API enum emb_result EMB_CALL emb_viewport_render(emb_viewport viewport,
+						     uint64_t timeout);
 
 #ifdef __cplusplus
 }

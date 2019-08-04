@@ -79,6 +79,7 @@ int application_main(int argc, char **argv)
 
 	while (!glfwWindowShouldClose(win)) {
 		glfwPollEvents();
+		emb_viewport_render(viewport, UINT64_MAX);
 	}
 
 	emb_viewport_destroy(viewport);
