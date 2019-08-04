@@ -34,6 +34,7 @@ Ensure(main_returns_zero_on_success)
 
 	expect(glfwWindowShouldClose, will_return(0));
 	expect(glfwPollEvents);
+	expect(emb_viewport_render, will_return(EMB_SUCCESS));
 	expect(glfwWindowShouldClose, will_return(1));
 
 	expect(emb_viewport_destroy);

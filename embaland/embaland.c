@@ -35,3 +35,11 @@ EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport)
 {
 	(void)viewport;
 }
+
+EMB_API enum emb_result EMB_CALL emb_viewport_render(emb_viewport viewport,
+						     uint64_t timeout)
+{
+	(void)viewport;
+	(void)timeout;
+	return EMB_SUCCESS;
+}
