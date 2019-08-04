@@ -26,6 +26,18 @@ int application_main(int argc, char **argv)
 		retval = EXIT_FAILURE;
 		goto glfw_terminate;
 	}
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+	GLFWwindow *win = glfwCreateWindow(960, 540, "Triangle", NULL, NULL);
+	if (win == NULL) {
+		retval = EXIT_FAILURE;
+		goto emb_destroy;
+	}
+	while (!glfwWindowShouldClose(win)) {
+		glfwPollEvents();
+	}
+
+	glfwDestroyWindow(win);
+emb_destroy:
 	emb_destroy(emb);
 glfw_terminate:
 	glfwTerminate();
