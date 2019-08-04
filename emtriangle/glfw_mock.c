@@ -6,6 +6,7 @@
 #include <config.h>
 #endif
 
+#include <vulkan/vulkan.h> /* must be included before glfw3.h */
 #include <GLFW/glfw3.h>
 
 #include <cgreen/mocks.h>
@@ -49,4 +50,12 @@ GLFWAPI void glfwDestroyWindow(GLFWwindow *window)
 GLFWAPI const char **glfwGetRequiredInstanceExtensions(uint32_t *count)
 {
 	return (const char **)mock(count);
+}
+
+GLFWAPI VkResult glfwCreateWindowSurface(VkInstance instance,
+					 GLFWwindow *window,
+					 const VkAllocationCallbacks *allocator,
+					 VkSurfaceKHR *surface)
+{
+	return (VkResult)mock(instance, window, allocator, surface);
 }
