@@ -11,6 +11,7 @@
 #include "emtriangle.h"
 
 #include <GLFW/glfw3.h>
+#include <vulkan/vulkan.h>
 #include <embaland/embaland.h>
 #include <cgreen/cgreen.h>
 #include <cgreen/mocks.h>
@@ -20,6 +21,8 @@
 Ensure(main_returns_zero_on_success)
 {
 	expect(glfwInit, will_return(1));
+	expect(glfwGetRequiredInstanceExtensions);
+	expect(vkCreateInstance, will_return(VK_SUCCESS));
 	expect(emb_create, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint, when(hint, is_equal_to(GLFW_CLIENT_API)),
 	       when(value, is_equal_to(GLFW_NO_API)));
@@ -33,6 +36,7 @@ Ensure(main_returns_zero_on_success)
 
 	expect(glfwDestroyWindow, when(window, is_equal_to(WINDOW)));
 	expect(emb_destroy);
+	expect(vkDestroyInstance);
 	expect(glfwTerminate);
 	assert_that(application_main(0, NULL), is_equal_to(EXIT_SUCCESS));
 }
@@ -44,11 +48,24 @@ Ensure(main_returns_failure_on_glfw_initalization_fail)
 	assert_that(application_main(0, NULL), is_equal_to(EXIT_FAILURE));
 }
 
+Ensure(main_returns_failure_on_vulkan_initialization_fail)
+{
+	expect(glfwInit, will_return(1));
+	expect(glfwGetRequiredInstanceExtensions);
+	expect(vkCreateInstance, will_return(VK_ERROR_INITIALIZATION_FAILED));
+	never_expect(vkDestroyInstance);
+	expect(glfwTerminate);
+	assert_that(application_main(0, NULL), is_equal_to(EXIT_FAILURE));
+}
+
 Ensure(main_returns_failure_on_embaland_initialization_fail)
 {
 	expect(glfwInit, will_return(1));
+	expect(glfwGetRequiredInstanceExtensions);
+	expect(vkCreateInstance, will_return(VK_SUCCESS));
 	expect(emb_create, will_return(EMB_ERROR_INITIALIZATION_FAILED));
 	never_expect(emb_destroy);
+	expect(vkDestroyInstance);
 	expect(glfwTerminate);
 	assert_that(application_main(0, NULL), is_equal_to(EXIT_FAILURE));
 }
@@ -56,10 +73,13 @@ Ensure(main_returns_failure_on_embaland_initialization_fail)
 Ensure(main_returns_failure_on_window_creation_fail)
 {
 	expect(glfwInit, will_return(1));
+	expect(glfwGetRequiredInstanceExtensions);
+	expect(vkCreateInstance, will_return(VK_SUCCESS));
 	expect(emb_create, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint);
 	expect(glfwCreateWindow, will_return(NULL));
 	expect(emb_destroy);
+	expect(vkDestroyInstance);
 	expect(glfwTerminate);
 	assert_that(application_main(0, NULL), is_equal_to(EXIT_FAILURE));
 }
@@ -71,6 +91,7 @@ int main(int argc, char **argv)
 	TestSuite *suite = create_named_test_suite("emtriangle");
 	add_test(suite, main_returns_zero_on_success);
 	add_test(suite, main_returns_failure_on_glfw_initalization_fail);
+	add_test(suite, main_returns_failure_on_vulkan_initialization_fail);
 	add_test(suite, main_returns_failure_on_embaland_initialization_fail);
 	add_test(suite, main_returns_failure_on_window_creation_fail);
 	TestReporter *reporter = create_text_reporter();
