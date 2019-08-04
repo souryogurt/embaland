@@ -20,3 +20,15 @@ EMB_API void EMB_CALL emb_destroy(emb_instance instance)
 {
 	(void)mock(instance);
 }
+
+EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
+						     VkSurfaceKHR surface,
+						     emb_viewport *viewport)
+{
+	return (enum emb_result)mock(embaland, surface, viewport);
+}
+
+EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport)
+{
+	mock(viewport);
+}

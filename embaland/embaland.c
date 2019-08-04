@@ -20,3 +20,18 @@ EMB_API void EMB_CALL emb_destroy(emb_instance embaland)
 {
 	(void)embaland;
 }
+
+EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
+						     VkSurfaceKHR surface,
+						     emb_viewport *viewport)
+{
+	(void)embaland;
+	(void)surface;
+	*viewport = NULL;
+	return EMB_SUCCESS;
+}
+
+EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport)
+{
+	(void)viewport;
+}

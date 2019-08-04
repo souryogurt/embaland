@@ -10,8 +10,8 @@
 
 #include "emtriangle.h"
 
+#include <vulkan/vulkan.h> /* must be included before glfw3.h */
 #include <GLFW/glfw3.h>
-#include <vulkan/vulkan.h>
 #include <embaland/embaland.h>
 
 #define APP_VERSION VK_MAKE_VERSION(VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
@@ -65,11 +65,26 @@ int application_main(int argc, char **argv)
 		retval = EXIT_FAILURE;
 		goto err_destroy_emb;
 	}
+	VkSurfaceKHR srf;
+	if (glfwCreateWindowSurface(vulkan, win, NULL, &srf) != VK_SUCCESS) {
+		retval = EXIT_FAILURE;
+		goto err_destroy_window;
+	}
+
+	emb_viewport viewport = NULL;
+	if (emb_viewport_create(emb, srf, &viewport) != EMB_SUCCESS) {
+		retval = EXIT_FAILURE;
+		goto err_destoy_surface;
+	}
 
 	while (!glfwWindowShouldClose(win)) {
 		glfwPollEvents();
 	}
 
+	emb_viewport_destroy(viewport);
+err_destoy_surface:
+	vkDestroySurfaceKHR(vulkan, srf, NULL);
+err_destroy_window:
 	glfwDestroyWindow(win);
 err_destroy_emb:
 	emb_destroy(emb);
