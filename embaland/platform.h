@@ -86,5 +86,5 @@ typedef unsigned __int64 uint64_t;
 #else
 #include <stdint.h>
 #endif
-#endif // !defined(EMB_NO_STDINT_H)
+#endif /* !defined(EMB_NO_STDINT_H) */
 #endif
