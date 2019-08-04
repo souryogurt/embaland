@@ -8,13 +8,15 @@
 
 #include "embaland.h"
 
-EMB_API enum emb_result EMB_CALL emb_create(emb_instance *instance)
+EMB_API enum emb_result EMB_CALL emb_create(VkInstance vulkan,
+					    emb_instance *embaland)
 {
-	*instance = NULL;
+	(void)vulkan;
+	*embaland = NULL;
 	return EMB_SUCCESS;
 }
 
-EMB_API void EMB_CALL emb_destroy(emb_instance instance)
+EMB_API void EMB_CALL emb_destroy(emb_instance embaland)
 {
-	(void)instance;
+	(void)embaland;
 }

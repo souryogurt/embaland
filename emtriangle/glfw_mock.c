@@ -45,3 +45,8 @@ GLFWAPI void glfwDestroyWindow(GLFWwindow *window)
 {
 	mock(window);
 }
+
+GLFWAPI const char **glfwGetRequiredInstanceExtensions(uint32_t *count)
+{
+	return (const char **)mock(count);
+}

@@ -15,13 +15,14 @@
 
 Ensure(emb_create_always_returns_success)
 {
-	emb_instance embaland;
-	assert_that(emb_create(&embaland), is_equal_to(EMB_SUCCESS));
+	VkInstance vulkan = VK_NULL_HANDLE;
+	emb_instance embaland = NULL;
+	assert_that(emb_create(vulkan, &embaland), is_equal_to(EMB_SUCCESS));
 }
 
 Ensure(emb_destroy_does_not_do_anything)
 {
-	emb_instance embaland;
+	emb_instance embaland = NULL;
 	emb_destroy(embaland);
 }
 
