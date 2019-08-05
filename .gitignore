@@ -94,3 +94,16 @@ dkms.conf
 *.gcno
 *.gcda
 *.gcov
+
+# local files
+.deps
+.libs
+.dirstamp
+*.log
+*.trs
+libtool
+Makefile
+config.h
+*_test
+emtriangle/emtriangle
+*.swp
