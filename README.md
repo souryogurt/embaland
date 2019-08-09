@@ -37,7 +37,7 @@ To build embaland for development, please use these flags:
 ```sh
 mkdir debug
 cd debug
-CFLAGS="-Wall -Wextra --std=gnu18 -pedantic -Og -g -fsanitize=address,undefined -fno-common -fsanitize-address-use-after-scope -fno-omit-frame-pointer " ../configure --enable-samples --enable-unit-tests
+CFLAGS="-Wall -Wextra --std=gnu18 -pedantic -Og -g -fno-inline -fsanitize=address,undefined -fno-common -fsanitize-address-use-after-scope -fno-omit-frame-pointer " ../configure --enable-samples --enable-unit-tests
 make
 ```
 
