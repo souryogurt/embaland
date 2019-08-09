@@ -6,7 +6,7 @@
 #include <config.h>
 #endif
 
-#include "embaland/ref.h"
+#include "ref.h"
 
 EMB_LOCAL extern inline void emb_ref_init(struct emb_ref *ref);
 EMB_LOCAL extern void emb_ref_get(struct emb_ref *ref);
