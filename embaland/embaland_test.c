@@ -8,7 +8,7 @@
 
 #include <stdlib.h>
 
-#include "embaland/embaland.h"
+#include "embaland.h"
 
 #include <cgreen/cgreen.h>
 #include <cgreen/mocks.h>

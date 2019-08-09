@@ -6,7 +6,7 @@
 #include <config.h>
 #endif
 
-#include "embaland/embaland.h"
+#include "embaland.h"
 
 EMB_API enum emb_result EMB_CALL emb_create(VkInstance vulkan,
 					    emb_instance *embaland)

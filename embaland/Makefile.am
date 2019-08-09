@@ -1,7 +1,9 @@
 lib_LTLIBRARIES += libembaland.la
 libembaland_la_SOURCES = embaland/embaland.c\
 			 embaland/ref.h\
-			 embaland/ref.c
+			 embaland/ref.c\
+			 embaland/list.h\
+			 embaland/list.c
 nobase_include_HEADERS = embaland/embaland.h\
 			 embaland/platform.h
 if EMB_BUILD_DLL
@@ -20,4 +22,10 @@ check_PROGRAMS += embaland/ref_test
 embaland_ref_test_SOURCES = embaland/ref_test.c
 embaland_ref_test_LDFLAGS = -static
 embaland_ref_test_LDADD = libembaland.la $(CGREEN_LIBS)
+
+TESTS += embaland/list_test
+check_PROGRAMS += embaland/list_test
+embaland_list_test_SOURCES = embaland/list_test.c
+embaland_list_test_LDFLAGS = -static
+embaland_list_test_LDADD = libembaland.la $(CGREEN_LIBS)
 endif

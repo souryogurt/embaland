@@ -8,7 +8,7 @@
 
 #include <stdlib.h>
 
-#include "embaland/ref.h"
+#include "ref.h"
 
 #include <cgreen/cgreen.h>
 #include <cgreen/mocks.h>
