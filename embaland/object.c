@@ -77,6 +77,8 @@ EMB_LOCAL void emb_set_join(struct emb_set *set, struct emb_object *obj)
 {
 	assert(set != NULL);
 	assert(obj != NULL);
+	emb_object_get(&set->obj);
+	emb_object_leave_set(obj);
 	list_add_tail(&set->list, &obj->entry);
 	obj->set = set;
 }
@@ -86,6 +88,7 @@ EMB_LOCAL void emb_object_leave_set(struct emb_object *obj)
 	assert(obj != NULL);
 	if (obj->set != NULL) {
 		list_del_init(&obj->entry);
+		emb_object_put(&obj->set->obj);
 		obj->set = NULL;
 	}
 }
