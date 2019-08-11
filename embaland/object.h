@@ -5,16 +5,10 @@
 #include "list.h"
 #include "ref.h"
 
-enum emb_object_result {
-	EMB_OBJECT_SUCCESS = 0,
-	EMB_OBJECT_ERROR_NAME = -1,
-};
-
 struct emb_set;
 struct emb_type;
 
 struct emb_object {
-	const char *name;
 	struct list_head entry;
 	struct emb_object *parent;
 	struct emb_set *set;
@@ -56,15 +50,12 @@ EMB_LOCAL struct emb_object *emb_object_get(struct emb_object *obj);
 EMB_LOCAL void emb_object_put(struct emb_object *obj);
 
 /**
- * Add object to hierarhy with specified name.
+ * Add object to hierarhy
  * @param obj is the object to add
  * @param parent is the object that will be parent of @a obj
- * @param fmt is format specifier for object name
- * @retval EMB_OBJECT_SUCCESS when object is succefully added
  */
-EMB_LOCAL enum emb_object_result emb_object_add(struct emb_object *obj,
-						struct emb_object *parent,
-						const char *fmt, ...);
+EMB_LOCAL void emb_object_add(struct emb_object *obj,
+			      struct emb_object *parent);
 
 /**
  * Remove object from hierarhy.
