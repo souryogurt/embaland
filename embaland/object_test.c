@@ -1,6 +1,6 @@
 /**
  * @file
- * Test suite for base object 
+ * Test suite for base object
  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -56,6 +56,7 @@ Ensure(emb_object_add_register_root_object_with_name)
 	struct emb_object obj = { 0 };
 	emb_object_init(&obj, &mock_object_type);
 
+	expect(emb_string_fmtv, will_return(strdup("root1")));
 	enum emb_object_result result = emb_object_add(&obj, NULL, "root%d", 1);
 	assert_that(result, is_equal_to(EMB_OBJECT_SUCCESS));
 	assert_that(obj.parent, is_null);
@@ -65,6 +66,18 @@ Ensure(emb_object_add_register_root_object_with_name)
 	emb_object_put(&obj);
 }
 
+Ensure(emb_object_add_fails_on_name_allocation_error)
+{
+	struct emb_object obj = { 0 };
+	emb_object_init(&obj, &mock_object_type);
+
+	expect(emb_string_fmtv, will_return(NULL));
+	enum emb_object_result result = emb_object_add(&obj, NULL, "root%d", 1);
+	assert_that(result, is_equal_to(EMB_OBJECT_ERROR_NAME));
+	assert_that(obj.parent, is_null);
+	assert_that(obj.name, is_null);
+}
+
 Ensure(emb_object_add_adds_object_to_hierarhy_with_name)
 {
 	struct emb_object root = { 0 };
@@ -72,6 +85,7 @@ Ensure(emb_object_add_adds_object_to_hierarhy_with_name)
 	struct emb_object obj = { 0 };
 	emb_object_init(&obj, &mock_object_type);
 
+	expect(emb_string_fmtv, will_return(strdup("child")));
 	enum emb_object_result result = emb_object_add(&obj, &root, "child");
 	assert_that(result, is_equal_to(EMB_OBJECT_SUCCESS));
 	assert_that(obj.parent, is_equal_to(&root));
@@ -90,10 +104,12 @@ Ensure(emb_object_add_releases_parent_ref_if_already_added)
 	emb_object_init(&root, &mock_object_type);
 	struct emb_object obj = { 0 };
 	emb_object_init(&obj, &mock_object_type);
+	expect(emb_string_fmtv, will_return(strdup("child")));
 	emb_object_add(&obj, &root, "child");
 	struct emb_object root2 = { 0 };
 	emb_object_init(&root2, &mock_object_type);
 
+	expect(emb_string_fmtv, will_return(strdup("child")));
 	enum emb_object_result result = emb_object_add(&obj, &root2, "child");
 	assert_that(result, is_equal_to(EMB_OBJECT_SUCCESS));
 	assert_that(obj.parent, is_equal_to(&root2));
@@ -115,6 +131,7 @@ Ensure(emb_object_del_removes_object_from_hierarhy)
 	emb_object_init(&root, &mock_object_type);
 	struct emb_object obj = { 0 };
 	emb_object_init(&obj, &mock_object_type);
+	expect(emb_string_fmtv, will_return(strdup("child")));
 	emb_object_add(&obj, &root, "child");
 
 	emb_object_del(&obj);
@@ -194,6 +211,7 @@ int main(int argc, char **argv)
 	add_test(suite, emb_object_get_increases_reference_counter);
 	add_test(suite, emb_object_put_calls_types_release);
 	add_test(suite, emb_object_add_register_root_object_with_name);
+	add_test(suite, emb_object_add_fails_on_name_allocation_error);
 	add_test(suite, emb_object_add_adds_object_to_hierarhy_with_name);
 	add_test(suite, emb_object_add_releases_parent_ref_if_already_added);
 	add_test(suite, emb_object_del_removes_object_from_hierarhy);

@@ -58,7 +58,7 @@ EMB_LOCAL enum emb_object_result emb_object_add(struct emb_object *obj,
 	assert(obj != NULL);
 	va_list args;
 	va_start(args, fmt);
-	const char *name = make_string_varg(fmt, args);
+	const char *name = emb_string_fmtv(fmt, args);
 	va_end(args);
 	if (name == NULL) {
 		return EMB_OBJECT_ERROR_NAME;
