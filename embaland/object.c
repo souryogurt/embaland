@@ -22,7 +22,6 @@ EMB_LOCAL void emb_object_init(struct emb_object *obj, struct emb_type *type)
 	emb_ref_init(&obj->ref);
 	list_init(&obj->entry);
 	obj->type = type;
-	obj->name = NULL;
 	obj->parent = NULL;
 	obj->set = NULL;
 }
@@ -42,7 +41,6 @@ static void object_release(struct emb_ref *ref)
 	emb_object_leave_set(obj);
 	emb_object_del(obj);
 	type->release(obj);
-	free((void *)obj->name);
 }
 
 EMB_LOCAL void emb_object_put(struct emb_object *obj)
@@ -51,29 +49,15 @@ EMB_LOCAL void emb_object_put(struct emb_object *obj)
 	emb_ref_put(&obj->ref, object_release);
 }
 
-EMB_LOCAL enum emb_object_result emb_object_add(struct emb_object *obj,
-						struct emb_object *parent,
-						const char *fmt, ...)
+EMB_LOCAL void emb_object_add(struct emb_object *obj, struct emb_object *parent)
 {
 	assert(obj != NULL);
-	va_list args;
-	va_start(args, fmt);
-	const char *name = emb_string_fmtv(fmt, args);
-	va_end(args);
-	if (name == NULL) {
-		return EMB_OBJECT_ERROR_NAME;
-	}
-	free((void *)obj->name);
-	obj->name = name;
-
-	if (parent != NULL) {
-		emb_object_get(parent);
-	}
+	assert(parent != NULL);
+	emb_object_get(parent);
 	if (obj->parent != NULL) {
 		emb_object_put(obj->parent);
 	}
 	obj->parent = parent;
-	return EMB_OBJECT_SUCCESS;
 }
 
 EMB_LOCAL void emb_object_del(struct emb_object *obj)
