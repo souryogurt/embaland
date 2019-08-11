@@ -11,26 +11,40 @@
 
 #include "string.h"
 
-EMB_LOCAL const char *make_string_varg(const char *fmt, va_list args)
+static char *emb_string_allocv(int *length, const char *fmt, va_list args)
 {
 	va_list args_copy;
 	va_copy(args_copy, args);
-	int str_length = vsnprintf(NULL, 0, fmt, args_copy);
+	*length = vsnprintf(NULL, 0, fmt, args_copy);
 	va_end(args_copy);
-	if (str_length < 0) {
+	if (*length < 0) {
 		return NULL;
 	}
 	/* Include '\0' */
-	str_length += 1;
+	*length += 1;
 
-	char *str = malloc(str_length);
+	return malloc(*length);
+}
+
+EMB_LOCAL const char *emb_string_fmtv(const char *fmt, va_list args)
+{
+	int length = 0;
+	char *str = emb_string_allocv(&length, fmt, args);
 	if (str == NULL) {
 		return NULL;
 	}
-	str_length = vsnprintf(str, str_length, fmt, args);
-	if (str_length < 0) {
+	if (vsnprintf(str, length, fmt, args) < 0) {
 		free(str);
 		return NULL;
 	}
 	return str;
+}
+
+EMB_LOCAL const char *emb_string_fmt(const char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	const char *result = emb_string_fmtv(fmt, args);
+	va_end(args);
+	return result;
 }

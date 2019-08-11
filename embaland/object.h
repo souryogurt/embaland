@@ -6,7 +6,7 @@
 #include "ref.h"
 
 enum emb_object_result {
-	EMB_OBJECT_SUCCESS,
+	EMB_OBJECT_SUCCESS = 0,
 	EMB_OBJECT_ERROR_NAME = -1,
 };
 

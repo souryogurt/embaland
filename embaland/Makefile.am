@@ -37,7 +37,14 @@ embaland_list_test_LDADD = libembaland.la $(CGREEN_LIBS)
 
 TESTS += embaland/object_test
 check_PROGRAMS += embaland/object_test
-embaland_object_test_SOURCES = embaland/object_test.c
+embaland_object_test_SOURCES = embaland/object_test.c\
+			       embaland/string_mock.c
 embaland_object_test_LDFLAGS = -static
 embaland_object_test_LDADD = libembaland.la $(CGREEN_LIBS)
+
+TESTS += embaland/string_test
+check_PROGRAMS += embaland/string_test
+embaland_string_test_SOURCES = embaland/string_test.c
+embaland_string_test_LDFLAGS = -static
+embaland_string_test_LDADD = libembaland.la $(CGREEN_LIBS)
 endif
