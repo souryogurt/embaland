@@ -39,6 +39,7 @@ static void object_release(struct emb_ref *ref)
 	assert(ref != NULL);
 	struct emb_object *obj = container_of(ref, struct emb_object, ref);
 	struct emb_type *type = obj->type;
+	emb_object_leave_set(obj);
 	emb_object_del(obj);
 	type->release(obj);
 	free((void *)obj->name);
@@ -81,5 +82,29 @@ EMB_LOCAL void emb_object_del(struct emb_object *obj)
 	if (obj->parent != NULL) {
 		emb_object_put(obj->parent);
 		obj->parent = NULL;
+	}
+}
+
+EMB_LOCAL void emb_set_init(struct emb_set *set, struct emb_type *type)
+{
+	assert(set != NULL);
+	emb_object_init(&set->obj, type);
+	list_init(&set->list);
+}
+
+EMB_LOCAL void emb_set_join(struct emb_set *set, struct emb_object *obj)
+{
+	assert(set != NULL);
+	assert(obj != NULL);
+	list_add_tail(&set->list, &obj->entry);
+	obj->set = set;
+}
+
+EMB_LOCAL void emb_object_leave_set(struct emb_object *obj)
+{
+	assert(obj != NULL);
+	if (obj->set != NULL) {
+		list_del_init(&obj->entry);
+		obj->set = NULL;
 	}
 }
