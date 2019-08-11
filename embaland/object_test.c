@@ -51,7 +51,7 @@ Ensure(emb_object_put_calls_types_release)
 	emb_object_put(&obj);
 }
 
-Ensure(emb_object_add_adds_object_to_hierarhy_with_name)
+Ensure(emb_object_add_adds_object_to_hierarhy)
 {
 	struct emb_object root = { 0 };
 	emb_object_init(&root, &mock_object_type);
@@ -150,6 +150,19 @@ Ensure(emb_object_put_removes_object_from_the_set)
 	assert_that(set.list.prev, is_equal_to(&set.list));
 }
 
+Ensure(emb_object_put_removes_object_from_hierarhy)
+{
+	struct emb_object root = { 0 };
+	emb_object_init(&root, &mock_object_type);
+	struct emb_object obj = { 0 };
+	emb_object_init(&obj, &mock_object_type);
+	emb_object_add(&obj, &root);
+
+	expect(mock_release);
+	emb_object_put(&obj);
+	assert_that(root.ref.count, is_equal_to(1));
+}
+
 int main(int argc, char **argv)
 {
 	(void)(argc);
@@ -158,13 +171,14 @@ int main(int argc, char **argv)
 	add_test(suite, emb_object_init_setups_object);
 	add_test(suite, emb_object_get_increases_reference_counter);
 	add_test(suite, emb_object_put_calls_types_release);
-	add_test(suite, emb_object_add_adds_object_to_hierarhy_with_name);
+	add_test(suite, emb_object_add_adds_object_to_hierarhy);
 	add_test(suite, emb_object_add_releases_parent_ref_if_already_added);
 	add_test(suite, emb_object_del_removes_object_from_hierarhy);
 	add_test(suite, emb_set_init_initializes_empty_set);
 	add_test(suite, emb_set_join_adds_object_to_set);
 	add_test(suite, emb_object_leave_set_removes_object_from_set);
 	add_test(suite, emb_object_put_removes_object_from_the_set);
+	add_test(suite, emb_object_put_removes_object_from_hierarhy);
 	TestReporter *reporter = create_text_reporter();
 	int exit_code = run_test_suite(suite, reporter);
 	destroy_reporter(reporter);

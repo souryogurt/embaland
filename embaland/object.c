@@ -7,12 +7,9 @@
 #endif
 
 #include <assert.h>
-#include <stdarg.h>
-#include <stdlib.h>
 
 #include "compiler.h"
 #include "object.h"
-#include "string.h"
 
 EMB_LOCAL void emb_object_init(struct emb_object *obj, struct emb_type *type)
 {
