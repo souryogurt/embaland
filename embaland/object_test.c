@@ -116,8 +116,32 @@ Ensure(emb_set_join_adds_object_to_set)
 	assert_that(obj.set, is_equal_to(&set));
 	assert_that(set.list.next, is_equal_to(&obj.entry));
 	assert_that(set.list.prev, is_equal_to(&obj.entry));
+	assert_that(set.obj.ref.count, is_equal_to(2));
 	assert_that(obj.entry.next, is_equal_to(&set.list));
 	assert_that(obj.entry.prev, is_equal_to(&set.list));
+}
+
+Ensure(emb_set_join_release_set_ref_when_already_joined)
+{
+	struct emb_set set = { 0 };
+	emb_set_init(&set, &mock_object_type);
+	struct emb_object obj = { 0 };
+	emb_object_init(&obj, &mock_object_type);
+	emb_set_join(&set, &obj);
+
+	struct emb_set set2 = { 0 };
+	emb_set_init(&set2, &mock_object_type);
+	emb_set_join(&set2, &obj);
+
+	assert_that(obj.set, is_equal_to(&set2));
+	assert_that(set2.list.next, is_equal_to(&obj.entry));
+	assert_that(set2.list.prev, is_equal_to(&obj.entry));
+	assert_that(set2.obj.ref.count, is_equal_to(2));
+	assert_that(obj.entry.next, is_equal_to(&set2.list));
+	assert_that(obj.entry.prev, is_equal_to(&set2.list));
+	assert_that(set.list.next, is_equal_to(&set.list));
+	assert_that(set.list.prev, is_equal_to(&set.list));
+	assert_that(set.obj.ref.count, is_equal_to(1));
 }
 
 Ensure(emb_object_leave_set_removes_object_from_set)
@@ -134,6 +158,7 @@ Ensure(emb_object_leave_set_removes_object_from_set)
 	assert_that(obj.entry.prev, is_equal_to(&obj.entry));
 	assert_that(set.list.next, is_equal_to(&set.list));
 	assert_that(set.list.prev, is_equal_to(&set.list));
+	assert_that(set.obj.ref.count, is_equal_to(1));
 }
 
 Ensure(emb_object_put_removes_object_from_the_set)
@@ -176,6 +201,7 @@ int main(int argc, char **argv)
 	add_test(suite, emb_object_del_removes_object_from_hierarhy);
 	add_test(suite, emb_set_init_initializes_empty_set);
 	add_test(suite, emb_set_join_adds_object_to_set);
+	add_test(suite, emb_set_join_release_set_ref_when_already_joined);
 	add_test(suite, emb_object_leave_set_removes_object_from_set);
 	add_test(suite, emb_object_put_removes_object_from_the_set);
 	add_test(suite, emb_object_put_removes_object_from_hierarhy);
