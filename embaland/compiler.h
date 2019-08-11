@@ -1,6 +1,8 @@
 #ifndef EMBALAND_COMPILER_H
 #define EMBALAND_COMPILER_H 1
 
+#include <stddef.h>
+
 #ifdef __GNUC__
 #define member_type(type, member) __typeof__(((type *)0)->member)
 #else
