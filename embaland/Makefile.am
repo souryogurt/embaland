@@ -5,6 +5,8 @@ libembaland_la_SOURCES = embaland/embaland.c\
 			 embaland/compiler.h\
 			 embaland/list.h\
 			 embaland/list.c\
+			 embaland/string.h\
+			 embaland/string.c\
 			 embaland/object.h\
 			 embaland/object.c
 
