@@ -35,9 +35,16 @@ static void object_release(struct emb_ref *ref)
 	assert(ref != NULL);
 	struct emb_object *obj = container_of(ref, struct emb_object, ref);
 	struct emb_type *type = obj->type;
-	emb_object_leave_set(obj);
-	emb_object_del(obj);
+	struct emb_object *parent = obj->parent;
+	struct emb_set *set = obj->set;
+	list_del_init(&obj->entry);
 	type->release(obj);
+	if (parent != NULL) {
+		emb_object_put(parent);
+	}
+	if (set != NULL) {
+		emb_object_put(&set->obj);
+	}
 }
 
 EMB_LOCAL void emb_object_put(struct emb_object *obj)
