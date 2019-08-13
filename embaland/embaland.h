@@ -34,6 +34,10 @@ extern "C" {
  * @param vulkan is the handle of the vulkan instance to use
  * @param[out] embaland points a emb_instance handle in which the resulting instance is returned
  * @retval EMB_SUCCESS embaland instance succefully created
+ * @retval EMB_ERROR_INITIALIZATION_FAILED target pointer is null
+ * @retval EMB_ERROR_INVALID_EXTERNAL_HANDLE vulkan handle is invalid
+ * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
+ * @sa emb_destroy()
  */
 EMB_API enum emb_result EMB_CALL emb_create(VkInstance vulkan,
 					    emb_instance *embaland);
@@ -51,6 +55,10 @@ EMB_API void EMB_CALL emb_destroy(emb_instance embaland);
  * @param[out] viewport points a emb_viewport handle in which the resulting
  *                      viewport is returned
  * @retval EMB_SUCCESS viewport succefully created
+ * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
+ * @retval EMB_ERROR_INVALID_EXTERNAL_HANDLE surface handle is invalid
+ * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
+ * @sa emb_viewport_release()
  */
 EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
 						     VkSurfaceKHR surface,
