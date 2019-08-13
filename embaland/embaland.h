@@ -8,7 +8,12 @@
 /**
  * The embaland API result.
  */
-enum emb_result { EMB_SUCCESS = 0, EMB_ERROR_INITIALIZATION_FAILED = -1 };
+enum emb_result {
+	EMB_SUCCESS = 0,
+	EMB_ERROR_OUT_OF_HOST_MEMORY = -1,
+	EMB_ERROR_INITIALIZATION_FAILED = -2,
+	EMB_ERROR_INVALID_EXTERNAL_HANDLE = -3,
+};
 
 /**
  * Opaque embaland instance handle.

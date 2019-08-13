@@ -12,7 +12,7 @@ struct emb_object {
 	struct list_head entry;
 	struct emb_object *parent;
 	struct emb_set *set;
-	struct emb_type *type;
+	const struct emb_type *type;
 	struct emb_ref ref;
 };
 
@@ -34,7 +34,8 @@ extern "C" {
  * @param obj is object to initialize
  * @param type is the type of new object
  */
-EMB_LOCAL void emb_object_init(struct emb_object *obj, struct emb_type *type);
+EMB_LOCAL void emb_object_init(struct emb_object *obj,
+			       const struct emb_type *type);
 
 /**
  * Get reference to object.
@@ -68,7 +69,7 @@ EMB_LOCAL void emb_object_del(struct emb_object *obj);
  * @param set is the set to initialize
  * @param type is the type of the set
  */
-EMB_LOCAL void emb_set_init(struct emb_set *set, struct emb_type *type);
+EMB_LOCAL void emb_set_init(struct emb_set *set, const struct emb_type *type);
 
 /**
  * Add object to the set.

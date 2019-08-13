@@ -11,7 +11,8 @@
 #include "compiler.h"
 #include "object.h"
 
-EMB_LOCAL void emb_object_init(struct emb_object *obj, struct emb_type *type)
+EMB_LOCAL void emb_object_init(struct emb_object *obj,
+			       const struct emb_type *type)
 {
 	assert(obj != NULL);
 	assert(type != NULL);
@@ -34,7 +35,7 @@ static void object_release(struct emb_ref *ref)
 {
 	assert(ref != NULL);
 	struct emb_object *obj = container_of(ref, struct emb_object, ref);
-	struct emb_type *type = obj->type;
+	const struct emb_type *type = obj->type;
 	struct emb_object *parent = obj->parent;
 	struct emb_set *set = obj->set;
 	list_del_init(&obj->entry);
@@ -73,7 +74,7 @@ EMB_LOCAL void emb_object_del(struct emb_object *obj)
 	}
 }
 
-EMB_LOCAL void emb_set_init(struct emb_set *set, struct emb_type *type)
+EMB_LOCAL void emb_set_init(struct emb_set *set, const struct emb_type *type)
 {
 	assert(set != NULL);
 	emb_object_init(&set->obj, type);
