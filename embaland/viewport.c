@@ -1,25 +1,13 @@
 /**
  * @file
- * embaland implementation
+ * Viewport implementation
  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "embaland.h"
-
-EMB_API enum emb_result EMB_CALL emb_create(VkInstance vulkan,
-					    emb_instance *embaland)
-{
-	(void)vulkan;
-	*embaland = NULL;
-	return EMB_SUCCESS;
-}
-
-EMB_API void EMB_CALL emb_destroy(emb_instance embaland)
-{
-	(void)embaland;
-}
+#include "viewport.h"
 
 EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
 						     VkSurfaceKHR surface,

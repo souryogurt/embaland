@@ -1,6 +1,6 @@
 /**
  * @file
- * Test suite for embaland
+ * Test suite for viewport
  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -9,22 +9,10 @@
 #include <stdlib.h>
 
 #include "embaland.h"
+#include "viewport.h"
 
 #include <cgreen/cgreen.h>
 #include <cgreen/mocks.h>
-
-Ensure(emb_create_always_returns_success)
-{
-	VkInstance vulkan = VK_NULL_HANDLE;
-	emb_instance embaland = NULL;
-	assert_that(emb_create(vulkan, &embaland), is_equal_to(EMB_SUCCESS));
-}
-
-Ensure(emb_destroy_does_not_do_anything)
-{
-	emb_instance embaland = NULL;
-	emb_destroy(embaland);
-}
 
 Ensure(emb_viewport_create_always_returns_success)
 {
@@ -51,9 +39,7 @@ int main(int argc, char **argv)
 {
 	(void)(argc);
 	(void)(argv);
-	TestSuite *suite = create_named_test_suite("embaland");
-	add_test(suite, emb_create_always_returns_success);
-	add_test(suite, emb_destroy_does_not_do_anything);
+	TestSuite *suite = create_named_test_suite("viewport");
 	add_test(suite, emb_viewport_create_always_returns_success);
 	add_test(suite, emb_viewport_release_does_not_do_anything);
 	add_test(suite, emb_viewport_render_always_returns_success);
