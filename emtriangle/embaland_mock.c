@@ -28,7 +28,7 @@ EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
 	return (enum emb_result)mock(embaland, surface, viewport);
 }
 
-EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport)
+EMB_API void EMB_CALL emb_viewport_release(emb_viewport viewport)
 {
 	mock(viewport);
 }

@@ -82,7 +82,7 @@ int application_main(int argc, char **argv)
 		emb_viewport_render(viewport, UINT64_MAX);
 	}
 
-	emb_viewport_destroy(viewport);
+	emb_viewport_release(viewport);
 err_destoy_surface:
 	vkDestroySurfaceKHR(vulkan, srf, NULL);
 err_destroy_window:

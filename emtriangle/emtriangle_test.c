@@ -37,7 +37,7 @@ Ensure(main_returns_zero_on_success)
 	expect(emb_viewport_render, will_return(EMB_SUCCESS));
 	expect(glfwWindowShouldClose, will_return(1));
 
-	expect(emb_viewport_destroy);
+	expect(emb_viewport_release);
 	expect(vkDestroySurfaceKHR);
 	expect(glfwDestroyWindow, when(window, is_equal_to(WINDOW)));
 	expect(emb_destroy);
