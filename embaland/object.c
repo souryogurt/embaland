@@ -26,8 +26,9 @@ EMB_LOCAL void emb_object_init(struct emb_object *obj,
 
 EMB_LOCAL struct emb_object *emb_object_get(struct emb_object *obj)
 {
-	assert(obj != NULL);
-	emb_ref_get(&obj->ref);
+	if (obj != NULL) {
+		emb_ref_get(&obj->ref);
+	}
 	return obj;
 }
 

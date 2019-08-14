@@ -21,8 +21,8 @@ struct emb_type {
 };
 
 struct emb_set {
-	struct list_head list;
 	struct emb_object obj;
+	struct list_head list;
 };
 
 #ifdef __cplusplus

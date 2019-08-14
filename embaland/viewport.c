@@ -8,10 +8,11 @@
 
 #include <stdlib.h>
 
-#include "embaland.h"
 #include "compiler.h"
-#include "viewport.h"
+#include "embaland.h"
 #include "instance.h"
+#include "presenter.h"
+#include "viewport.h"
 
 static void emb_viewport_destroy(struct emb_object *obj)
 {
@@ -40,17 +41,26 @@ EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
 		result = EMB_ERROR_INITIALIZATION_FAILED;
 		goto err;
 	}
+
+	struct emb_presenter *presenter = NULL;
+	result = emb_get_presenter(embaland, &presenter);
+	if (result != EMB_SUCCESS) {
+		goto err;
+	}
 	struct emb_viewport *new_viewport = malloc(sizeof(*new_viewport));
 	if (new_viewport == NULL) {
 		result = EMB_ERROR_OUT_OF_HOST_MEMORY;
-		goto err;
+		goto err_release_presenter;
 	}
 	emb_object_init(&new_viewport->obj, &viewport_type);
 	emb_object_add(&new_viewport->obj, &embaland->obj);
+	emb_set_join(&presenter->set, &new_viewport->obj);
 	new_viewport->emb = embaland;
 	new_viewport->surface = surface;
 
 	*viewport = new_viewport;
+err_release_presenter:
+	emb_object_put(&presenter->set.obj);
 err:
 	return result;
 }

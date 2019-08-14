@@ -9,7 +9,9 @@ libembaland_la_SOURCES = embaland/ref.h\
 			 embaland/instance.h\
 			 embaland/instance.c\
 			 embaland/viewport.h\
-			 embaland/viewport.c
+			 embaland/viewport.c\
+			 embaland/presenter.h\
+			 embaland/presenter.c
 
 nobase_include_HEADERS = embaland/embaland.h\
 			 embaland/platform.h
