@@ -25,10 +25,9 @@ static const struct emb_type buffer_view_type = {
 	.release = emb_buffer_view_destroy,
 };
 
-EMB_API enum emb_result EMB_CALL emb_buffer_view_create(emb_buffer buffer,
-							size_t offset,
-							size_t nbytes,
-							emb_buffer_view *bview)
+EMB_API enum emb_result EMB_CALL emb_buffer_view_create(
+	emb_buffer buffer, size_t offset, size_t nbytes, uint8_t stride,
+	enum emb_buffer_target target, emb_buffer_view *bview)
 {
 	enum emb_result result = EMB_SUCCESS;
 	if (buffer == NULL) {
@@ -56,6 +55,8 @@ EMB_API enum emb_result EMB_CALL emb_buffer_view_create(emb_buffer buffer,
 	new_bview->buffer = buffer;
 	new_bview->offset = offset;
 	new_bview->nbytes = nbytes;
+	new_bview->stride = stride;
+	new_bview->target = target;
 	*bview = new_bview;
 err:
 	return result;

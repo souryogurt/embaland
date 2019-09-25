@@ -11,6 +11,8 @@ struct emb_buffer_view {
 	struct emb_buffer *buffer;
 	size_t offset;
 	size_t nbytes;
+	uint8_t stride;
+	enum emb_buffer_target target;
 };
 
 #ifdef __cplusplus

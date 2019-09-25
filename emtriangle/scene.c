@@ -10,7 +10,7 @@
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 static const float points[] = {
-	0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+	0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F,
 };
 
 enum emb_result scene_init(emb_instance emb, struct scene *scn)
@@ -23,6 +23,7 @@ enum emb_result scene_init(emb_instance emb, struct scene *scn)
 	}
 
 	retval = emb_buffer_view_create(scn->buffer, 0, sizeof(points),
+					sizeof(points[0]), EMB_ARRAY_BUFFER,
 					&scn->bview);
 	if (retval != EMB_SUCCESS) {
 		goto err_release_buffer;

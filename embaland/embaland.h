@@ -15,6 +15,11 @@ enum emb_result {
 	EMB_ERROR_INVALID_EXTERNAL_HANDLE = -3,
 };
 
+enum emb_buffer_target {
+	EMB_ARRAY_BUFFER = 34962,
+	EMB_ELEMENT_ARRAY_BUFFER = 34963,
+};
+
 /**
  * Opaque embaland instance handle.
  */
@@ -115,6 +120,8 @@ EMB_API void EMB_CALL emb_buffer_release(emb_buffer buffer);
  * @param buffer is handle of the embaland buffer to create view for
  * @param offset is offset in bytes in buffer
  * @param nbytes is the size in bytes of the view
+ * @param stride is the size in bytes between vertex attributes
+ * @param target is the target that the GPU buffer should be bound to
  * @param[out] bview points a emb_buffer_view handle in which the resulting
  *                   buffer view is returned
  * @retval EMB_SUCCESS buffer view succefully created
@@ -122,10 +129,9 @@ EMB_API void EMB_CALL emb_buffer_release(emb_buffer buffer);
  * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
  * @sa emb_buffer_view_release()
  */
-EMB_API enum emb_result EMB_CALL emb_buffer_view_create(emb_buffer buffer,
-							size_t offset,
-							size_t nbytes,
-							emb_buffer_view *bview);
+EMB_API enum emb_result EMB_CALL emb_buffer_view_create(
+	emb_buffer buffer, size_t offset, size_t nbytes, uint8_t stride,
+	enum emb_buffer_target target, emb_buffer_view *bview);
 /**
  * Release embaland buffer view.
  * @param bview is the handle of buffer view to release
