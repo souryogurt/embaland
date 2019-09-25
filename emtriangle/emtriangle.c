@@ -7,8 +7,10 @@
 #endif
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "emtriangle.h"
+#include "scene.h"
 
 #include <vulkan/vulkan.h> /* must be included before glfw3.h */
 #include <GLFW/glfw3.h>
@@ -58,12 +60,17 @@ int application_main(int argc, char **argv)
 		retval = EXIT_FAILURE;
 		goto err_destroy_vulkan;
 	}
+	struct scene triangle_scene = { 0 };
+	if (scene_init(emb, &triangle_scene) != EMB_SUCCESS) {
+		retval = EXIT_FAILURE;
+		goto err_destroy_emb;
+	}
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	GLFWwindow *win = glfwCreateWindow(960, 540, "Triangle", NULL, NULL);
 	if (win == NULL) {
 		retval = EXIT_FAILURE;
-		goto err_destroy_emb;
+		goto err_destroy_scene;
 	}
 	VkSurfaceKHR srf;
 	if (glfwCreateWindowSurface(vulkan, win, NULL, &srf) != VK_SUCCESS) {
@@ -87,6 +94,8 @@ err_destoy_surface:
 	vkDestroySurfaceKHR(vulkan, srf, NULL);
 err_destroy_window:
 	glfwDestroyWindow(win);
+err_destroy_scene:
+	scene_release(&triangle_scene);
 err_destroy_emb:
 	emb_destroy(emb);
 err_destroy_vulkan:

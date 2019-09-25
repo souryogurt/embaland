@@ -24,6 +24,7 @@ Ensure(main_returns_zero_on_success)
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
 	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(scene_init, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint, when(hint, is_equal_to(GLFW_CLIENT_API)),
 	       when(value, is_equal_to(GLFW_NO_API)));
 	expect(glfwCreateWindow, will_return(WINDOW),
@@ -40,6 +41,7 @@ Ensure(main_returns_zero_on_success)
 	expect(emb_viewport_release);
 	expect(vkDestroySurfaceKHR);
 	expect(glfwDestroyWindow, when(window, is_equal_to(WINDOW)));
+	expect(scene_release);
 	expect(emb_destroy);
 	expect(vkDestroyInstance);
 	expect(glfwTerminate);
@@ -75,14 +77,29 @@ Ensure(main_returns_failure_on_embaland_initialization_fail)
 	assert_that(application_main(0, NULL), is_equal_to(EXIT_FAILURE));
 }
 
+Ensure(main_returns_failure_on_scene_initialization_fail)
+{
+	expect(glfwInit, will_return(1));
+	expect(glfwGetRequiredInstanceExtensions);
+	expect(vkCreateInstance, will_return(VK_SUCCESS));
+	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(scene_init, will_return(EMB_ERROR_INITIALIZATION_FAILED));
+	expect(emb_destroy);
+	expect(vkDestroyInstance);
+	expect(glfwTerminate);
+	assert_that(application_main(0, NULL), is_equal_to(EXIT_FAILURE));
+}
+
 Ensure(main_returns_failure_on_window_creation_fail)
 {
 	expect(glfwInit, will_return(1));
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
 	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(scene_init, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint);
 	expect(glfwCreateWindow, will_return(NULL));
+	expect(scene_release);
 	expect(emb_destroy);
 	expect(vkDestroyInstance);
 	expect(glfwTerminate);
@@ -95,6 +112,7 @@ Ensure(main_returns_failure_on_surface_creation_fail)
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
 	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(scene_init, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint);
 	expect(glfwCreateWindow, will_return(WINDOW));
 	expect(glfwCreateWindowSurface,
@@ -102,6 +120,7 @@ Ensure(main_returns_failure_on_surface_creation_fail)
 	never_expect(vkDestroySurfaceKHR);
 	expect(glfwDestroyWindow);
 	expect(emb_destroy);
+	expect(scene_release);
 	expect(vkDestroyInstance);
 	expect(glfwTerminate);
 	assert_that(application_main(0, NULL), is_equal_to(EXIT_FAILURE));
@@ -113,6 +132,7 @@ Ensure(main_returns_failure_on_viewport_creation_fail)
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
 	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(scene_init, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint);
 	expect(glfwCreateWindow, will_return(WINDOW));
 	expect(glfwCreateWindowSurface, will_return(VK_SUCCESS));
@@ -121,6 +141,7 @@ Ensure(main_returns_failure_on_viewport_creation_fail)
 	never_expect(emb_viewport_destroy);
 	expect(vkDestroySurfaceKHR);
 	expect(glfwDestroyWindow);
+	expect(scene_release);
 	expect(emb_destroy);
 	expect(vkDestroyInstance);
 	expect(glfwTerminate);
@@ -136,6 +157,7 @@ int main(int argc, char **argv)
 	add_test(suite, main_returns_failure_on_glfw_initalization_fail);
 	add_test(suite, main_returns_failure_on_vulkan_initialization_fail);
 	add_test(suite, main_returns_failure_on_embaland_initialization_fail);
+	add_test(suite, main_returns_failure_on_scene_initialization_fail);
 	add_test(suite, main_returns_failure_on_window_creation_fail);
 	add_test(suite, main_returns_failure_on_surface_creation_fail);
 	add_test(suite, main_returns_failure_on_viewport_creation_fail);
