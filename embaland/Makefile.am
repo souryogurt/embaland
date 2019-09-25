@@ -10,8 +10,6 @@ libembaland_la_SOURCES = embaland/ref.h\
 			 embaland/instance.c\
 			 embaland/viewport.h\
 			 embaland/viewport.c\
-			 embaland/presenter.h\
-			 embaland/presenter.c\
 			 embaland/buffer.h\
 			 embaland/buffer.c\
 			 embaland/buffer_view.h\

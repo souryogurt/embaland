@@ -64,7 +64,7 @@ Ensure(emb_viewport_create_allocates_new_viewport)
 	assert_that(result, is_equal_to(EMB_SUCCESS));
 	assert_that(viewport, is_not_null);
 	assert_that(viewport->obj.parent, is_equal_to(&emb.obj));
-	assert_that(emb.obj.ref.count, is_equal_to(3));
+	assert_that(emb.obj.ref.count, is_equal_to(2));
 	assert_that(viewport->surface, is_equal_to(surface));
 	assert_that(viewport->emb, is_equal_to(&emb));
 

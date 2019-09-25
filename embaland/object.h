@@ -5,24 +5,16 @@
 #include "list.h"
 #include "ref.h"
 
-struct emb_set;
 struct emb_type;
 
 struct emb_object {
-	struct list_head entry;
 	struct emb_object *parent;
-	struct emb_set *set;
 	const struct emb_type *type;
 	struct emb_ref ref;
 };
 
 struct emb_type {
 	void (*const release)(struct emb_object *obj);
-};
-
-struct emb_set {
-	struct emb_object obj;
-	struct list_head list;
 };
 
 #ifdef __cplusplus
@@ -63,26 +55,6 @@ EMB_LOCAL void emb_object_add(struct emb_object *obj,
  * @param obj is the object to remove
  */
 EMB_LOCAL void emb_object_del(struct emb_object *obj);
-
-/**
- * Initialize empty object set.
- * @param set is the set to initialize
- * @param type is the type of the set
- */
-EMB_LOCAL void emb_set_init(struct emb_set *set, const struct emb_type *type);
-
-/**
- * Add object to the set.
- * @param set is the set to add object to
- * @param obj is the object to add
- */
-EMB_LOCAL void emb_set_join(struct emb_set *set, struct emb_object *obj);
-
-/**
- * Remove object from set.
- * @param obj is the object to remove
- */
-EMB_LOCAL void emb_object_leave_set(struct emb_object *obj);
 
 #ifdef __cplusplus
 }

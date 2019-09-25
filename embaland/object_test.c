@@ -28,8 +28,6 @@ Ensure(emb_object_init_setups_object)
 
 	emb_object_init(&obj, &mock_object_type);
 	assert_that(obj.ref.count, is_equal_to(1));
-	assert_that(obj.entry.next, is_equal_to(&obj.entry));
-	assert_that(obj.entry.prev, is_equal_to(&obj.entry));
 	assert_that(obj.type, is_equal_to(&mock_object_type));
 }
 
@@ -92,89 +90,6 @@ Ensure(emb_object_del_removes_object_from_hierarhy)
 	assert_that(root.ref.count, is_equal_to(1));
 }
 
-Ensure(emb_set_init_initializes_empty_set)
-{
-	struct emb_set set = { 0 };
-
-	emb_set_init(&set, &mock_object_type);
-	assert_that(set.list.next, is_equal_to(&set.list));
-	assert_that(set.list.prev, is_equal_to(&set.list));
-	assert_that(set.obj.ref.count, is_equal_to(1));
-	assert_that(set.obj.entry.next, is_equal_to(&set.obj.entry));
-	assert_that(set.obj.entry.prev, is_equal_to(&set.obj.entry));
-	assert_that(set.obj.type, is_equal_to(&mock_object_type));
-}
-
-Ensure(emb_set_join_adds_object_to_set)
-{
-	struct emb_set set = { 0 };
-	emb_set_init(&set, &mock_object_type);
-	struct emb_object obj = { 0 };
-	emb_object_init(&obj, &mock_object_type);
-
-	emb_set_join(&set, &obj);
-	assert_that(obj.set, is_equal_to(&set));
-	assert_that(set.list.next, is_equal_to(&obj.entry));
-	assert_that(set.list.prev, is_equal_to(&obj.entry));
-	assert_that(set.obj.ref.count, is_equal_to(2));
-	assert_that(obj.entry.next, is_equal_to(&set.list));
-	assert_that(obj.entry.prev, is_equal_to(&set.list));
-}
-
-Ensure(emb_set_join_release_set_ref_when_already_joined)
-{
-	struct emb_set set = { 0 };
-	emb_set_init(&set, &mock_object_type);
-	struct emb_object obj = { 0 };
-	emb_object_init(&obj, &mock_object_type);
-	emb_set_join(&set, &obj);
-
-	struct emb_set set2 = { 0 };
-	emb_set_init(&set2, &mock_object_type);
-	emb_set_join(&set2, &obj);
-
-	assert_that(obj.set, is_equal_to(&set2));
-	assert_that(set2.list.next, is_equal_to(&obj.entry));
-	assert_that(set2.list.prev, is_equal_to(&obj.entry));
-	assert_that(set2.obj.ref.count, is_equal_to(2));
-	assert_that(obj.entry.next, is_equal_to(&set2.list));
-	assert_that(obj.entry.prev, is_equal_to(&set2.list));
-	assert_that(set.list.next, is_equal_to(&set.list));
-	assert_that(set.list.prev, is_equal_to(&set.list));
-	assert_that(set.obj.ref.count, is_equal_to(1));
-}
-
-Ensure(emb_object_leave_set_removes_object_from_set)
-{
-	struct emb_set set = { 0 };
-	emb_set_init(&set, &mock_object_type);
-	struct emb_object obj = { 0 };
-	emb_object_init(&obj, &mock_object_type);
-	emb_set_join(&set, &obj);
-
-	emb_object_leave_set(&obj);
-	assert_that(obj.set, is_null);
-	assert_that(obj.entry.next, is_equal_to(&obj.entry));
-	assert_that(obj.entry.prev, is_equal_to(&obj.entry));
-	assert_that(set.list.next, is_equal_to(&set.list));
-	assert_that(set.list.prev, is_equal_to(&set.list));
-	assert_that(set.obj.ref.count, is_equal_to(1));
-}
-
-Ensure(emb_object_put_removes_object_from_the_set)
-{
-	struct emb_set set = { 0 };
-	emb_set_init(&set, &mock_object_type);
-	struct emb_object obj = { 0 };
-	emb_object_init(&obj, &mock_object_type);
-	emb_set_join(&set, &obj);
-
-	expect(mock_release);
-	emb_object_put(&obj);
-	assert_that(set.list.next, is_equal_to(&set.list));
-	assert_that(set.list.prev, is_equal_to(&set.list));
-}
-
 Ensure(emb_object_put_removes_object_from_hierarhy)
 {
 	struct emb_object root = { 0 };
@@ -199,11 +114,6 @@ int main(int argc, char **argv)
 	add_test(suite, emb_object_add_adds_object_to_hierarhy);
 	add_test(suite, emb_object_add_releases_parent_ref_if_already_added);
 	add_test(suite, emb_object_del_removes_object_from_hierarhy);
-	add_test(suite, emb_set_init_initializes_empty_set);
-	add_test(suite, emb_set_join_adds_object_to_set);
-	add_test(suite, emb_set_join_release_set_ref_when_already_joined);
-	add_test(suite, emb_object_leave_set_removes_object_from_set);
-	add_test(suite, emb_object_put_removes_object_from_the_set);
 	add_test(suite, emb_object_put_removes_object_from_hierarhy);
 	TestReporter *reporter = create_text_reporter();
 	int exit_code = run_test_suite(suite, reporter);
