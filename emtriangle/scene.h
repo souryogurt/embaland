@@ -6,6 +6,7 @@
 struct scene {
 	emb_buffer buffer;
 	emb_buffer_view bview;
+	emb_accessor positions;
 };
 
 #ifdef __cplusplus
