@@ -46,6 +46,16 @@ typedef struct emb_buffer_view *emb_buffer_view;
 typedef struct emb_accessor *emb_accessor;
 
 /**
+ * Opaque material handle.
+ */
+typedef struct emb_material *emb_material;
+
+/**
+ * Opaque mesh handle.
+ */
+typedef struct emb_mesh *emb_mesh;
+
+/**
  * Accessor parameters
  */
 struct emb_accessor_info {
@@ -65,6 +75,48 @@ struct emb_accessor_info {
 	const void *max_values;
 };
 
+/**
+ * Attribute connection
+ */
+struct emb_attribute {
+	uint32_t type;
+	emb_accessor data;
+};
+
+/**
+ * Primitive parameters
+ */
+struct emb_primitive {
+	/** An array of attribute-data connections */
+	const struct emb_attribute *attributes;
+	/** Number of attributes in @a attributes array */
+	uint32_t attributes_count;
+	/** The accessor that contains the indices */
+	emb_accessor indeces;
+	/** The material to apply to this primitive when rendering */
+	emb_material material;
+	/** The type of primitives to render */
+	uint32_t mode;
+	/** An array of Morph Targets */
+	const struct emb_attribute *targets;
+	/** Number of elements in @a targets array */
+	uint32_t targets_count;
+};
+
+/**
+ * Mesh parameters
+ */
+struct emb_mesh_info {
+	/** An array of primitives, each defining geometry to be rendered */
+	const struct emb_primitive *primitives;
+	/** The number of primitves in @a primitives array */
+	uint32_t primitives_count;
+	/** An array of weights to be applied to the Morph Targets */
+	const float *weights;
+	/** The number of weights in @a weights array */
+	uint32_t weights_count;
+};
+
 #define EMB_ATTRIB_COMPONENT_BYTE 5120
 #define EMB_ATTRIB_COMPONENT_UBYTE 5121
 #define EMB_ATTRIB_COMPONENT_SHORT 5122
@@ -79,6 +131,50 @@ struct emb_accessor_info {
 #define EMB_ATTRIB_MAT2 4
 #define EMB_ATTRIB_MAT3 5
 #define EMB_ATTRIB_MAT4 6
+
+#define EMB_MODE_POINTS 0
+#define EMB_MODE_LINES 1
+#define EMB_MODE_LINE_LOOP 2
+#define EMB_MODE_LINE_STRIP 3
+#define EMB_MODE_TRIANGLES 4
+#define EMB_MODE_TRIANGLE_STRIP 5
+#define EMB_MODE_TRIANGLE_FAN 6
+
+#define EMB_ATTRIB_POSITION 0
+#define EMB_ATTRIB_NORMAL 1
+#define EMB_ATTRIB_TANGENT 2
+#define EMB_ATTRIB_TEXCOORD_0 3
+#define EMB_ATTRIB_TEXCOORD_1 4
+#define EMB_ATTRIB_TEXCOORD_2 5
+#define EMB_ATTRIB_TEXCOORD_3 6
+#define EMB_ATTRIB_TEXCOORD_4 7
+#define EMB_ATTRIB_TEXCOORD_5 8
+#define EMB_ATTRIB_TEXCOORD_6 9
+#define EMB_ATTRIB_TEXCOORD_7 10
+#define EMB_ATTRIB_TEXCOORD_8 11
+#define EMB_ATTRIB_TEXCOORD_9 12
+#define EMB_ATTRIB_TEXCOORD_10 13
+#define EMB_ATTRIB_TEXCOORD_11 14
+#define EMB_ATTRIB_TEXCOORD_12 15
+#define EMB_ATTRIB_TEXCOORD_13 16
+#define EMB_ATTRIB_TEXCOORD_14 17
+#define EMB_ATTRIB_TEXCOORD_15 18
+#define EMB_ATTRIB_COLOR_0 19
+#define EMB_ATTRIB_COLOR_1 20
+#define EMB_ATTRIB_COLOR_2 21
+#define EMB_ATTRIB_COLOR_3 22
+#define EMB_ATTRIB_COLOR_4 23
+#define EMB_ATTRIB_COLOR_5 24
+#define EMB_ATTRIB_COLOR_6 25
+#define EMB_ATTRIB_COLOR_7 26
+#define EMB_ATTRIB_COLOR_8 27
+#define EMB_ATTRIB_COLOR_9 28
+#define EMB_ATTRIB_COLOR_10 29
+#define EMB_ATTRIB_COLOR_11 30
+#define EMB_ATTRIB_COLOR_12 31
+#define EMB_ATTRIB_COLOR_13 32
+#define EMB_ATTRIB_COLOR_14 33
+#define EMB_ATTRIB_COLOR_15 34
 
 #ifdef __cplusplus
 extern "C" {
@@ -184,7 +280,7 @@ EMB_API void EMB_CALL emb_buffer_view_release(emb_buffer_view bview);
  * @param[in] info is accessor parameters info
  * @param[out] acsr points to emb_accessor handle in which the resulting
  *                  accessor is returned
- * @retval EMB_SUCCESS accessor succefully create
+ * @retval EMB_SUCCESS accessor succefully created
  * @retval EMB_ERROR_INITIALIZATION_FAILED buffer view handle is NULL
  * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
  * @sa emb_accessor_release()
@@ -198,6 +294,27 @@ emb_accessor_create(emb_buffer_view bview, const struct emb_accessor_info *info,
  * @param acsr is the handle of accessor to release
  */
 EMB_API void EMB_CALL emb_accessor_release(emb_accessor acsr);
+
+/**
+ * Create mesh.
+ * @param embaland is handle of the embaland instance
+ * @param[in] info is mesh parameters info
+ * @param[out] mesh points to emb_mesh handle in which the resulting mesh is
+ *                  returned
+ * @retval EMB_SUCCESS mesh succefully created
+ * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or info are null
+ * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
+ * @sa emb_mesh_release()
+ */
+EMB_API enum emb_result EMB_CALL
+emb_mesh_create(emb_instance embaland, const struct emb_mesh_info *info,
+		emb_mesh *mesh);
+
+/**
+ * Release mesh.
+ * @param mesh is the handle of mesh to release
+ */
+EMB_API void EMB_CALL emb_mesh_release(emb_mesh mesh);
 
 #ifdef __cplusplus
 }

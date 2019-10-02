@@ -15,7 +15,9 @@ libembaland_la_SOURCES = embaland/ref.h\
 			 embaland/buffer_view.h\
 			 embaland/buffer_view.c\
 			 embaland/accessor.h\
-			 embaland/accessor.c
+			 embaland/accessor.c\
+			 embaland/mesh.h\
+			 embaland/mesh.c
 
 nobase_include_HEADERS = embaland/embaland.h\
 			 embaland/platform.h
