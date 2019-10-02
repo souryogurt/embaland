@@ -8,6 +8,10 @@
 
 struct emb_mesh {
 	struct emb_object obj;
+	const struct emb_primitive *primitives;
+	size_t primitives_count;
+	const float *weights;
+	size_t weights_count;
 };
 
 #ifdef __cplusplus
