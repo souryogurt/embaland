@@ -16,16 +16,6 @@
 #include "accessor.h"
 #include "material.h"
 
-static void emb_mesh_destroy(struct emb_object *obj)
-{
-	struct emb_mesh *mesh = container_of(obj, struct emb_mesh, obj);
-	free(mesh);
-}
-
-static const struct emb_type mesh_type = {
-	.release = emb_mesh_destroy,
-};
-
 static enum emb_result emb_primitive_init(struct emb_primitive *primitive,
 					  const struct emb_primitive *source)
 {
@@ -41,7 +31,7 @@ static enum emb_result emb_primitive_init(struct emb_primitive *primitive,
 		goto err;
 	}
 	memcpy(attributes, source->attributes, a_size);
-	for (size_t i = 0; i < source->attributes_count; i++) {
+	for (size_t i = 0; i < source->attributes_count; ++i) {
 		emb_object_get(&attributes[i].data->obj);
 	}
 	primitive->attributes = attributes;
@@ -57,7 +47,7 @@ static enum emb_result emb_primitive_init(struct emb_primitive *primitive,
 			goto err_free_attributes;
 		}
 		memcpy(targets, source->targets, t_size);
-		for (size_t i = 0; i < source->targets_count; i++) {
+		for (size_t i = 0; i < source->targets_count; ++i) {
 			emb_object_get(&targets[i].data->obj);
 		}
 		primitive->targets = targets;
@@ -76,7 +66,7 @@ static enum emb_result emb_primitive_init(struct emb_primitive *primitive,
 
 	return retval;
 err_free_attributes:
-	for (size_t i = 0; i < primitive->attributes_count; i++) {
+	for (size_t i = 0; i < primitive->attributes_count; ++i) {
 		emb_object_put(&primitive->attributes[i].data->obj);
 	}
 	free((void *)primitive->attributes);
@@ -86,6 +76,20 @@ err:
 
 static void emb_primitive_destroy(const struct emb_primitive *primitive)
 {
+	if (primitive->material != NULL) {
+		emb_object_put(&primitive->material->obj);
+	}
+	if (primitive->indeces != NULL) {
+		emb_object_put(&primitive->indeces->obj);
+	}
+	for (size_t i = 0; i < primitive->targets_count; ++i) {
+		emb_object_put(&primitive->targets[i].data->obj);
+	}
+	free((void *)primitive->targets);
+	for (size_t i = 0; i < primitive->attributes_count; ++i) {
+		emb_object_put(&primitive->attributes[i].data->obj);
+	}
+	free((void *)primitive->attributes);
 }
 
 static enum emb_result
@@ -104,7 +108,7 @@ emb_mesh_primitives_init(struct emb_primitive *primitives,
 	}
 	return retval;
 err:
-	for (size_t i = 0; i < idx; i++) {
+	for (size_t i = 0; i < idx; ++i) {
 		emb_primitive_destroy(&primitives[i]);
 	}
 	return retval;
@@ -142,7 +146,7 @@ static enum emb_result emb_mesh_init(struct emb_mesh *mesh,
 
 	return retval;
 err_destroy_primitives:
-	for (size_t i = 0; i < mesh->primitives_count; i++) {
+	for (size_t i = 0; i < mesh->primitives_count; ++i) {
 		emb_primitive_destroy(&mesh->primitives[i]);
 	}
 err_free_primitives:
@@ -150,6 +154,21 @@ err_free_primitives:
 err:
 	return retval;
 }
+
+static void emb_mesh_destroy(struct emb_object *obj)
+{
+	struct emb_mesh *mesh = container_of(obj, struct emb_mesh, obj);
+	free((void *)mesh->weights);
+	for (size_t i = 0; i < mesh->primitives_count; ++i) {
+		emb_primitive_destroy(&mesh->primitives[i]);
+	}
+	free((void *)mesh->primitives);
+	free(mesh);
+}
+
+static const struct emb_type mesh_type = {
+	.release = emb_mesh_destroy,
+};
 
 EMB_API enum emb_result EMB_CALL emb_mesh_create(
 	emb_instance embaland, const struct emb_mesh_info *info, emb_mesh *mesh)
