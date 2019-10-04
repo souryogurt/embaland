@@ -64,3 +64,11 @@ EMB_API void EMB_CALL emb_accessor_release(emb_accessor acsr)
 		emb_object_put(&acsr->obj);
 	}
 }
+
+EMB_LOCAL emb_accessor emb_accessor_get(emb_accessor acsr)
+{
+	if (acsr != NULL) {
+		emb_object_get(&acsr->obj);
+	}
+	return acsr;
+}

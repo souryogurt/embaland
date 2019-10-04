@@ -14,6 +14,8 @@ struct emb_material {
 extern "C" {
 #endif
 
+EMB_LOCAL emb_material emb_material_get(emb_material mat);
+
 #ifdef __cplusplus
 }
 #endif

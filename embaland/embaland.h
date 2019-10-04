@@ -316,6 +316,12 @@ emb_mesh_create(emb_instance embaland, const struct emb_mesh_info *info,
  */
 EMB_API void EMB_CALL emb_mesh_release(emb_mesh mesh);
 
+/**
+ * Release material
+ * @param mat is the handle of material to release
+ */
+EMB_API void EMB_CALL emb_material_release(emb_material mat);
+
 #ifdef __cplusplus
 }
 #endif

@@ -60,7 +60,7 @@ int application_main(int argc, char **argv)
 		retval = EXIT_FAILURE;
 		goto err_destroy_vulkan;
 	}
-	struct scene triangle_scene = { 0 };
+	struct scene triangle_scene = { NULL };
 	if (scene_init(emb, &triangle_scene) != EMB_SUCCESS) {
 		retval = EXIT_FAILURE;
 		goto err_destroy_emb;
