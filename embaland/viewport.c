@@ -10,7 +10,6 @@
 
 #include "compiler.h"
 #include "embaland.h"
-#include "instance.h"
 #include "viewport.h"
 
 EMB_API enum emb_result EMB_CALL emb_viewport_init(emb_viewport viewport,

@@ -4,11 +4,12 @@
 #include <embaland/embaland.h>
 #include <embaland/buffer.h>
 #include <embaland/buffer_view.h>
+#include <embaland/accessor.h>
 
 struct scene {
 	struct emb_buffer buffer;
 	struct emb_buffer_view bview;
-	emb_accessor positions;
+	struct emb_accessor positions;
 	emb_mesh triangle;
 };
 

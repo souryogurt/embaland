@@ -4,11 +4,11 @@
 #include "platform.h"
 
 #include <vulkan/vulkan_core.h>
-#include "object.h"
 
 struct emb_buffer_view;
+struct emb_instance;
 struct emb_accessor {
-	struct emb_object obj;
+	struct emb_instance *emb;
 	struct emb_buffer_view *bview;
 	uint32_t byte_offset;
 	uint32_t comp_type;

@@ -10,7 +10,6 @@
 
 #include "compiler.h"
 #include "embaland.h"
-#include "instance.h"
 #include "buffer.h"
 
 EMB_API enum emb_result EMB_CALL emb_buffer_init(emb_buffer buffer,

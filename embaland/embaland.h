@@ -269,19 +269,17 @@ EMB_API enum emb_result EMB_CALL emb_buffer_view_init(
 EMB_API void EMB_CALL emb_buffer_view_release(emb_buffer_view bview);
 
 /**
- * Create data accessor.
+ * Initialize data accessor.
+ * @param acsr points to emb_accessor to initialize
  * @param bview is buffer view to access data from
  * @param[in] info is accessor parameters info
- * @param[out] acsr points to emb_accessor handle in which the resulting
- *                  accessor is returned
- * @retval EMB_SUCCESS accessor succefully created
+ * @retval EMB_SUCCESS accessor succefully initalized
  * @retval EMB_ERROR_INITIALIZATION_FAILED buffer view handle is NULL
- * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
  * @sa emb_accessor_release()
  */
 EMB_API enum emb_result EMB_CALL
-emb_accessor_create(emb_buffer_view bview, const struct emb_accessor_info *info,
-		    emb_accessor *acsr);
+emb_accessor_init(emb_accessor acsr, emb_buffer_view bview,
+		  const struct emb_accessor_info *info);
 
 /**
  * Release data accessor.

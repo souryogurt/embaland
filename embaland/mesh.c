@@ -31,8 +31,7 @@ static enum emb_result emb_primitive_init(struct emb_primitive *primitive,
 		goto err;
 	}
 	for (size_t i = 0; i < source->attributes_count; ++i) {
-		emb_accessor src = source->attributes[i].data;
-		attributes[i].data = emb_accessor_get(src);
+		attributes[i].data = source->attributes[i].data;
 	}
 	primitive->attributes = attributes;
 	primitive->attributes_count = source->attributes_count;
@@ -47,14 +46,13 @@ static enum emb_result emb_primitive_init(struct emb_primitive *primitive,
 			goto err_free_attributes;
 		}
 		for (size_t i = 0; i < source->targets_count; ++i) {
-			emb_accessor src = source->targets[i].data;
-			targets[i].data = emb_accessor_get(src);
+			targets[i].data = source->targets[i].data;
 		}
 		primitive->targets = targets;
 		primitive->targets_count = source->targets_count;
 	}
 
-	primitive->indeces = emb_accessor_get(source->indeces);
+	primitive->indeces = source->indeces;
 	primitive->material = emb_material_get(source->material);
 	primitive->mode = source->mode;
 
