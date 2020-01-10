@@ -248,22 +248,20 @@ EMB_API enum emb_result EMB_CALL emb_buffer_init(emb_buffer buffer,
 EMB_API void EMB_CALL emb_buffer_release(emb_buffer buffer);
 
 /**
- * Create embaland buffer view.
- * @param buffer is handle of the embaland buffer to create view for
+ * Initialize embaland buffer view.
+ * @param bview points to emb_buffer_view to initialize
+ * @param buffer is handle of the embaland buffer to initialize view for
  * @param offset is offset in bytes in buffer
  * @param nbytes is the size in bytes of the view
  * @param stride is the size in bytes between vertex attributes
  * @param target is the target that the GPU buffer should be bound to
- * @param[out] bview points a emb_buffer_view handle in which the resulting
- *                   buffer view is returned
- * @retval EMB_SUCCESS buffer view succefully created
+ * @retval EMB_SUCCESS buffer view succefully initialized
  * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
- * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
  * @sa emb_buffer_view_release()
  */
-EMB_API enum emb_result EMB_CALL emb_buffer_view_create(
-	emb_buffer buffer, size_t offset, size_t nbytes, uint8_t stride,
-	enum emb_buffer_target target, emb_buffer_view *bview);
+EMB_API enum emb_result EMB_CALL emb_buffer_view_init(
+	emb_buffer_view bview, emb_buffer buffer, size_t offset, size_t nbytes,
+	uint8_t stride, enum emb_buffer_target target);
 /**
  * Release embaland buffer view.
  * @param bview is the handle of buffer view to release

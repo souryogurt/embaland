@@ -12,11 +12,11 @@
 #include "embaland.h"
 #include "buffer_view.h"
 #include "accessor.h"
+#include "instance.h"
 
 static void emb_accessor_destroy(struct emb_object *obj)
 {
 	struct emb_accessor *acsr = container_of(obj, struct emb_accessor, obj);
-	emb_buffer_view_release(acsr->bview);
 	free(acsr);
 }
 
@@ -44,9 +44,8 @@ emb_accessor_create(emb_buffer_view bview, const struct emb_accessor_info *info,
 		goto err;
 	}
 	emb_object_init(&new_acsr->obj, &accessor_type);
-	emb_object_add(&new_acsr->obj, bview->obj.parent);
+	emb_object_add(&new_acsr->obj, &bview->emb->obj);
 
-	emb_object_get(&bview->obj);
 	new_acsr->bview = bview;
 	new_acsr->byte_offset = info->byte_offset;
 	new_acsr->comp_type = info->comp_type;
