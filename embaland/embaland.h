@@ -228,21 +228,19 @@ EMB_API enum emb_result EMB_CALL emb_viewport_render(emb_viewport viewport,
 						     uint64_t timeout);
 
 /**
- * Create embaland buffer.
+ * Initialize embaland buffer.
+ * @param buffer points to emb_buffer to initialize
  * @param embaland is handle of the embaland instance
  * @param bytes is a pointer to initial buffer's data
  * @param nbytes is the size in bytes of @data
- * @param[out] buffer points a emb_buffer handle in which the resulting
- *                    buffer is returned
- * @retval EMB_SUCCESS buffer succefully created
+ * @retval EMB_SUCCESS buffer succefully initialized
  * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
- * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
  * @sa emb_buffer_release()
  */
-EMB_API enum emb_result EMB_CALL emb_buffer_create(emb_instance embaland,
-						   const void *bytes,
-						   size_t nbytes,
-						   emb_buffer *buffer);
+EMB_API enum emb_result EMB_CALL emb_buffer_init(emb_buffer buffer,
+						 emb_instance embaland,
+						 const void *bytes,
+						 size_t nbytes);
 /**
  * Release embaland buffer.
  * @param buffer is the handle of buffer to release

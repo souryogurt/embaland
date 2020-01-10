@@ -4,11 +4,11 @@
 #include "platform.h"
 
 #include <vulkan/vulkan_core.h>
-#include "object.h"
 
+struct emb_instance;
 struct emb_buffer {
-	struct emb_object obj;
 	size_t capacity;
+	struct emb_instance *emb;
 };
 
 #ifdef __cplusplus

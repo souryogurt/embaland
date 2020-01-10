@@ -12,6 +12,7 @@
 #include "embaland.h"
 #include "buffer.h"
 #include "buffer_view.h"
+#include "instance.h"
 
 static void emb_buffer_view_destroy(struct emb_object *obj)
 {
@@ -49,9 +50,8 @@ EMB_API enum emb_result EMB_CALL emb_buffer_view_create(
 		goto err;
 	}
 	emb_object_init(&new_bview->obj, &buffer_view_type);
-	emb_object_add(&new_bview->obj, buffer->obj.parent);
+	emb_object_add(&new_bview->obj, &buffer->emb->obj);
 
-	emb_object_get(&buffer->obj);
 	new_bview->buffer = buffer;
 	new_bview->offset = offset;
 	new_bview->nbytes = nbytes;

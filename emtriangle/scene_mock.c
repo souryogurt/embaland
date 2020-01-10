@@ -17,7 +17,7 @@ enum emb_result scene_init(emb_instance emb, struct scene *scn)
 	return (enum emb_result)mock(emb, scn);
 }
 
-void scene_release(const struct scene *scn)
+void scene_release(struct scene *scn)
 {
 	(void)mock(scn);
 }

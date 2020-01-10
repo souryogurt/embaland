@@ -2,9 +2,10 @@
 #define EMTRIANGLE_SCENE_H 1
 
 #include <embaland/embaland.h>
+#include <embaland/buffer.h>
 
 struct scene {
-	emb_buffer buffer;
+	struct emb_buffer buffer;
 	emb_buffer_view bview;
 	emb_accessor positions;
 	emb_mesh triangle;
@@ -27,7 +28,7 @@ enum emb_result scene_init(emb_instance emb, struct scene *scn);
  * Release triangle scene.
  * @param scn pointer to scene to release
  */
-void scene_release(const struct scene *scn);
+void scene_release(struct scene *scn);
 
 #ifdef __cplusplus
 }

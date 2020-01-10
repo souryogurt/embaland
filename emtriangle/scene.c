@@ -17,12 +17,12 @@ enum emb_result scene_init(emb_instance emb, struct scene *scn)
 {
 	enum emb_result retval = EMB_SUCCESS;
 
-	retval = emb_buffer_create(emb, points, sizeof(points), &scn->buffer);
+	retval = emb_buffer_init(&scn->buffer, emb, points, sizeof(points));
 	if (retval != EMB_SUCCESS) {
 		goto err;
 	}
 
-	retval = emb_buffer_view_create(scn->buffer, 0, sizeof(points),
+	retval = emb_buffer_view_create(&scn->buffer, 0, sizeof(points),
 					sizeof(points[0]), EMB_ARRAY_BUFFER,
 					&scn->bview);
 	if (retval != EMB_SUCCESS) {
@@ -73,15 +73,15 @@ err_release_accessor:
 err_release_bview:
 	emb_buffer_view_release(scn->bview);
 err_release_buffer:
-	emb_buffer_release(scn->buffer);
+	emb_buffer_release(&scn->buffer);
 err:
 	return retval;
 }
 
-void scene_release(const struct scene *scn)
+void scene_release(struct scene *scn)
 {
 	emb_mesh_release(scn->triangle);
 	emb_accessor_release(scn->positions);
 	emb_buffer_view_release(scn->bview);
-	emb_buffer_release(scn->buffer);
+	emb_buffer_release(&scn->buffer);
 }
