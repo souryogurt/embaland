@@ -31,7 +31,7 @@ Ensure(main_returns_zero_on_success)
 	       when(width, is_equal_to(960)), when(height, is_equal_to(540)),
 	       when(title, is_equal_to_string("Triangle")));
 	expect(glfwCreateWindowSurface, will_return(VK_SUCCESS));
-	expect(emb_viewport_create, will_return(EMB_SUCCESS));
+	expect(emb_viewport_init, will_return(EMB_SUCCESS));
 
 	expect(glfwWindowShouldClose, will_return(0));
 	expect(glfwPollEvents);
@@ -136,8 +136,7 @@ Ensure(main_returns_failure_on_viewport_creation_fail)
 	expect(glfwWindowHint);
 	expect(glfwCreateWindow, will_return(WINDOW));
 	expect(glfwCreateWindowSurface, will_return(VK_SUCCESS));
-	expect(emb_viewport_create,
-	       will_return(EMB_ERROR_INITIALIZATION_FAILED));
+	expect(emb_viewport_init, will_return(EMB_ERROR_INITIALIZATION_FAILED));
 	never_expect(emb_viewport_destroy);
 	expect(vkDestroySurfaceKHR);
 	expect(glfwDestroyWindow);

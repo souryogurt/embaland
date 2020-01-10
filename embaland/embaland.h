@@ -200,20 +200,18 @@ EMB_API enum emb_result EMB_CALL emb_create(VkInstance vulkan,
 EMB_API void EMB_CALL emb_destroy(emb_instance embaland);
 
 /**
- * Create embaland viewport.
+ * Initialize embaland viewport.
+ * @param viewport points to emb_viewport to initialize
  * @param embaland is handle of the embaland instance
- * @param surface is vulkan surface to create viewport on
- * @param[out] viewport points a emb_viewport handle in which the resulting
- *                      viewport is returned
- * @retval EMB_SUCCESS viewport succefully created
+ * @param surface is vulkan surface to init viewport on
+ * @retval EMB_SUCCESS viewport succefully initialized
  * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
  * @retval EMB_ERROR_INVALID_EXTERNAL_HANDLE surface handle is invalid
- * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
  * @sa emb_viewport_release()
  */
-EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
-						     VkSurfaceKHR surface,
-						     emb_viewport *viewport);
+EMB_API enum emb_result EMB_CALL emb_viewport_init(emb_viewport viewport,
+						   emb_instance embaland,
+						   VkSurfaceKHR surface);
 
 /**
  * Release reference to embaland viewport.
