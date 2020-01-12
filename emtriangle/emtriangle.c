@@ -16,6 +16,7 @@
 #include <GLFW/glfw3.h>
 #include <embaland/embaland.h>
 #include <embaland/viewport.h>
+#include <embaland/instance.h>
 
 #define APP_VERSION VK_MAKE_VERSION(VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
 
@@ -56,13 +57,13 @@ int application_main(int argc, char **argv)
 		goto err_terminate_glfw;
 	}
 
-	emb_instance emb = NULL;
-	if (emb_create(vulkan, &emb) != EMB_SUCCESS) {
+	struct emb_instance emb = { NULL };
+	if (emb_init(&emb, vulkan) != EMB_SUCCESS) {
 		retval = EXIT_FAILURE;
 		goto err_destroy_vulkan;
 	}
 	struct scene triangle_scene;
-	if (scene_init(emb, &triangle_scene) != EMB_SUCCESS) {
+	if (scene_init(&emb, &triangle_scene) != EMB_SUCCESS) {
 		retval = EXIT_FAILURE;
 		goto err_destroy_emb;
 	}
@@ -80,7 +81,7 @@ int application_main(int argc, char **argv)
 	}
 
 	struct emb_viewport viewport = { NULL };
-	if (emb_viewport_init(&viewport, emb, srf) != EMB_SUCCESS) {
+	if (emb_viewport_init(&viewport, &emb, srf) != EMB_SUCCESS) {
 		retval = EXIT_FAILURE;
 		goto err_destoy_surface;
 	}
@@ -98,7 +99,7 @@ err_destroy_window:
 err_destroy_scene:
 	scene_release(&triangle_scene);
 err_destroy_emb:
-	emb_destroy(emb);
+	emb_destroy(&emb);
 err_destroy_vulkan:
 	vkDestroyInstance(vulkan, NULL);
 err_terminate_glfw:

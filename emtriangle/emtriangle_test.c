@@ -23,7 +23,7 @@ Ensure(main_returns_zero_on_success)
 	expect(glfwInit, will_return(1));
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
-	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(emb_init, will_return(EMB_SUCCESS));
 	expect(scene_init, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint, when(hint, is_equal_to(GLFW_CLIENT_API)),
 	       when(value, is_equal_to(GLFW_NO_API)));
@@ -70,7 +70,7 @@ Ensure(main_returns_failure_on_embaland_initialization_fail)
 	expect(glfwInit, will_return(1));
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
-	expect(emb_create, will_return(EMB_ERROR_INITIALIZATION_FAILED));
+	expect(emb_init, will_return(EMB_ERROR_INITIALIZATION_FAILED));
 	never_expect(emb_destroy);
 	expect(vkDestroyInstance);
 	expect(glfwTerminate);
@@ -82,7 +82,7 @@ Ensure(main_returns_failure_on_scene_initialization_fail)
 	expect(glfwInit, will_return(1));
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
-	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(emb_init, will_return(EMB_SUCCESS));
 	expect(scene_init, will_return(EMB_ERROR_INITIALIZATION_FAILED));
 	expect(emb_destroy);
 	expect(vkDestroyInstance);
@@ -95,7 +95,7 @@ Ensure(main_returns_failure_on_window_creation_fail)
 	expect(glfwInit, will_return(1));
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
-	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(emb_init, will_return(EMB_SUCCESS));
 	expect(scene_init, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint);
 	expect(glfwCreateWindow, will_return(NULL));
@@ -111,7 +111,7 @@ Ensure(main_returns_failure_on_surface_creation_fail)
 	expect(glfwInit, will_return(1));
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
-	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(emb_init, will_return(EMB_SUCCESS));
 	expect(scene_init, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint);
 	expect(glfwCreateWindow, will_return(WINDOW));
@@ -131,7 +131,7 @@ Ensure(main_returns_failure_on_viewport_creation_fail)
 	expect(glfwInit, will_return(1));
 	expect(glfwGetRequiredInstanceExtensions);
 	expect(vkCreateInstance, will_return(VK_SUCCESS));
-	expect(emb_create, will_return(EMB_SUCCESS));
+	expect(emb_init, will_return(EMB_SUCCESS));
 	expect(scene_init, will_return(EMB_SUCCESS));
 	expect(glfwWindowHint);
 	expect(glfwCreateWindow, will_return(WINDOW));

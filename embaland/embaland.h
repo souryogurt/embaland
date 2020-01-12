@@ -10,9 +10,8 @@
  */
 enum emb_result {
 	EMB_SUCCESS = 0,
-	EMB_ERROR_OUT_OF_HOST_MEMORY = -1,
-	EMB_ERROR_INITIALIZATION_FAILED = -2,
-	EMB_ERROR_INVALID_EXTERNAL_HANDLE = -3,
+	EMB_ERROR_INITIALIZATION_FAILED = -1,
+	EMB_ERROR_INVALID_EXTERNAL_HANDLE = -2,
 };
 
 enum emb_buffer_target {
@@ -181,17 +180,16 @@ extern "C" {
 #endif
 
 /**
- * Create embaland instance.
+ * Initialize embaland instance.
+ * @param embaland points a emb_instance to initialize
  * @param vulkan is the handle of the vulkan instance to use
- * @param[out] embaland points a emb_instance handle in which the resulting instance is returned
  * @retval EMB_SUCCESS embaland instance succefully created
  * @retval EMB_ERROR_INITIALIZATION_FAILED target pointer is null
  * @retval EMB_ERROR_INVALID_EXTERNAL_HANDLE vulkan handle is invalid
- * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
  * @sa emb_destroy()
  */
-EMB_API enum emb_result EMB_CALL emb_create(VkInstance vulkan,
-					    emb_instance *embaland);
+EMB_API enum emb_result EMB_CALL emb_init(emb_instance embaland,
+					  VkInstance vulkan);
 
 /**
  * Destroy embaland instance.

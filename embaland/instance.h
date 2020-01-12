@@ -4,10 +4,8 @@
 #include "platform.h"
 
 #include <vulkan/vulkan_core.h>
-#include "object.h"
 
 struct emb_instance {
-	struct emb_object obj;
 	VkInstance vulkan;
 };
 
