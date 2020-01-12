@@ -288,19 +288,16 @@ emb_accessor_init(emb_accessor acsr, emb_buffer_view bview,
 EMB_API void EMB_CALL emb_accessor_release(emb_accessor acsr);
 
 /**
- * Create mesh.
+ * Initialize mesh.
+ * @param mesh points to emb_mesh to initialize
  * @param embaland is handle of the embaland instance
  * @param[in] info is mesh parameters info
- * @param[out] mesh points to emb_mesh handle in which the resulting mesh is
- *                  returned
  * @retval EMB_SUCCESS mesh succefully created
  * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or info are null
- * @retval EMB_ERROR_OUT_OF_HOST_MEMORY can't allocate memory
  * @sa emb_mesh_release()
  */
-EMB_API enum emb_result EMB_CALL
-emb_mesh_create(emb_instance embaland, const struct emb_mesh_info *info,
-		emb_mesh *mesh);
+EMB_API enum emb_result EMB_CALL emb_mesh_init(
+	emb_mesh mesh, emb_instance embaland, const struct emb_mesh_info *info);
 
 /**
  * Release mesh.

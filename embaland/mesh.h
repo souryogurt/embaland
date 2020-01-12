@@ -4,10 +4,9 @@
 #include "platform.h"
 
 #include <vulkan/vulkan_core.h>
-#include "object.h"
 
 struct emb_mesh {
-	struct emb_object obj;
+	struct emb_instance *emb;
 	const struct emb_primitive *primitives;
 	size_t primitives_count;
 	const float *weights;

@@ -44,12 +44,12 @@ enum emb_result scene_init(emb_instance emb, struct scene *scn)
 		goto err_release_bview;
 	}
 
-	const struct emb_attribute tri_attribute = {
+	scn->tri_attribute = (const struct emb_attribute){
 		.type = EMB_ATTRIB_POSITION,
 		.data = &scn->positions,
 	};
-	const struct emb_primitive tri_primitive = {
-		.attributes = &tri_attribute,
+	scn->tri_primitive = (const struct emb_primitive){
+		.attributes = &scn->tri_attribute,
 		.attributes_count = 1,
 		.indeces = NULL,
 		.material = NULL,
@@ -58,12 +58,12 @@ enum emb_result scene_init(emb_instance emb, struct scene *scn)
 		.targets_count = 0,
 	};
 	const struct emb_mesh_info mesh_info = {
-		.primitives = &tri_primitive,
+		.primitives = &scn->tri_primitive,
 		.primitives_count = 1,
 		.weights = NULL,
 		.weights_count = 0,
 	};
-	retval = emb_mesh_create(emb, &mesh_info, &scn->triangle);
+	retval = emb_mesh_init(&scn->triangle, emb, &mesh_info);
 	if (retval != EMB_SUCCESS) {
 		goto err_release_accessor;
 	}
@@ -80,7 +80,7 @@ err:
 
 void scene_release(struct scene *scn)
 {
-	emb_mesh_release(scn->triangle);
+	emb_mesh_release(&scn->triangle);
 	emb_accessor_release(&scn->positions);
 	emb_buffer_view_release(&scn->bview);
 	emb_buffer_release(&scn->buffer);

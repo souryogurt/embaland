@@ -5,12 +5,15 @@
 #include <embaland/buffer.h>
 #include <embaland/buffer_view.h>
 #include <embaland/accessor.h>
+#include <embaland/mesh.h>
 
 struct scene {
 	struct emb_buffer buffer;
 	struct emb_buffer_view bview;
 	struct emb_accessor positions;
-	emb_mesh triangle;
+	struct emb_attribute tri_attribute;
+	struct emb_primitive tri_primitive;
+	struct emb_mesh triangle;
 };
 
 #ifdef __cplusplus
