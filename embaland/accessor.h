@@ -21,8 +21,6 @@ struct emb_accessor {
 extern "C" {
 #endif
 
-EMB_LOCAL emb_accessor emb_accessor_get(emb_accessor acsr);
-
 #ifdef __cplusplus
 }
 #endif

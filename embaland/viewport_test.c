@@ -54,14 +54,14 @@ Ensure(emb_viewport_init_allocates_new_viewport)
 	assert_that(viewport.emb, is_equal_to(&emb));
 }
 
-Ensure(emb_viewport_release_frees_resources)
+Ensure(emb_viewport_destroy_frees_resources)
 {
 	struct emb_instance emb = { 0 };
 	VkSurfaceKHR surface = ((VkSurfaceKHR)1);
 	struct emb_viewport viewport = { NULL };
 	emb_viewport_init(&viewport, &emb, surface);
 
-	emb_viewport_release(&viewport);
+	emb_viewport_destroy(&viewport);
 }
 
 Ensure(emb_viewport_render_always_returns_success)
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 	add_test(suite, emb_viewport_init_returns_error_on_invalid_surface);
 	add_test(suite, emb_viewport_init_returns_error_on_invalid_pointer);
 	add_test(suite, emb_viewport_init_allocates_new_viewport);
-	add_test(suite, emb_viewport_release_frees_resources);
+	add_test(suite, emb_viewport_destroy_frees_resources);
 	add_test(suite, emb_viewport_render_always_returns_success);
 	TestReporter *reporter = create_text_reporter();
 	int exit_code = run_test_suite(suite, reporter);

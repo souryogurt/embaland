@@ -12,7 +12,7 @@
 #include "embaland.h"
 #include "material.h"
 
-EMB_API void EMB_CALL emb_material_release(emb_material mat)
+EMB_API void EMB_CALL emb_material_destroy(emb_material mat)
 {
 	(void)mat;
 }

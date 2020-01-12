@@ -36,7 +36,7 @@ err:
 	return result;
 }
 
-EMB_API void EMB_CALL emb_viewport_release(emb_viewport viewport)
+EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport)
 {
 	(void)viewport;
 }

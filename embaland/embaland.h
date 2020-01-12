@@ -205,17 +205,17 @@ EMB_API void EMB_CALL emb_destroy(emb_instance embaland);
  * @retval EMB_SUCCESS viewport succefully initialized
  * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
  * @retval EMB_ERROR_INVALID_EXTERNAL_HANDLE surface handle is invalid
- * @sa emb_viewport_release()
+ * @sa emb_viewport_destroy()
  */
 EMB_API enum emb_result EMB_CALL emb_viewport_init(emb_viewport viewport,
 						   emb_instance embaland,
 						   VkSurfaceKHR surface);
 
 /**
- * Release reference to embaland viewport.
- * @param viewport is the handle of the viewport to release
+ * Destroy embaland viewport.
+ * @param viewport is the handle of the viewport to destroy
  */
-EMB_API void EMB_CALL emb_viewport_release(emb_viewport viewport);
+EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport);
 
 /** Render viewport.
  * @param viewport is handle of the viewport to render
@@ -233,17 +233,17 @@ EMB_API enum emb_result EMB_CALL emb_viewport_render(emb_viewport viewport,
  * @param nbytes is the size in bytes of @data
  * @retval EMB_SUCCESS buffer succefully initialized
  * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
- * @sa emb_buffer_release()
+ * @sa emb_buffer_destroy()
  */
 EMB_API enum emb_result EMB_CALL emb_buffer_init(emb_buffer buffer,
 						 emb_instance embaland,
 						 const void *bytes,
 						 size_t nbytes);
 /**
- * Release embaland buffer.
- * @param buffer is the handle of buffer to release
+ * Destroy embaland buffer.
+ * @param buffer is the handle of buffer to destroy
  */
-EMB_API void EMB_CALL emb_buffer_release(emb_buffer buffer);
+EMB_API void EMB_CALL emb_buffer_destroy(emb_buffer buffer);
 
 /**
  * Initialize embaland buffer view.
@@ -255,16 +255,16 @@ EMB_API void EMB_CALL emb_buffer_release(emb_buffer buffer);
  * @param target is the target that the GPU buffer should be bound to
  * @retval EMB_SUCCESS buffer view succefully initialized
  * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
- * @sa emb_buffer_view_release()
+ * @sa emb_buffer_view_destroy()
  */
 EMB_API enum emb_result EMB_CALL emb_buffer_view_init(
 	emb_buffer_view bview, emb_buffer buffer, size_t offset, size_t nbytes,
 	uint8_t stride, enum emb_buffer_target target);
 /**
- * Release embaland buffer view.
- * @param bview is the handle of buffer view to release
+ * Destroy embaland buffer view.
+ * @param bview is the handle of buffer view to destroy
  */
-EMB_API void EMB_CALL emb_buffer_view_release(emb_buffer_view bview);
+EMB_API void EMB_CALL emb_buffer_view_destroy(emb_buffer_view bview);
 
 /**
  * Initialize data accessor.
@@ -273,17 +273,17 @@ EMB_API void EMB_CALL emb_buffer_view_release(emb_buffer_view bview);
  * @param[in] info is accessor parameters info
  * @retval EMB_SUCCESS accessor succefully initalized
  * @retval EMB_ERROR_INITIALIZATION_FAILED buffer view handle is NULL
- * @sa emb_accessor_release()
+ * @sa emb_accessor_destroy()
  */
 EMB_API enum emb_result EMB_CALL
 emb_accessor_init(emb_accessor acsr, emb_buffer_view bview,
 		  const struct emb_accessor_info *info);
 
 /**
- * Release data accessor.
- * @param acsr is the handle of accessor to release
+ * Destroy data accessor.
+ * @param acsr is the handle of accessor to destroy
  */
-EMB_API void EMB_CALL emb_accessor_release(emb_accessor acsr);
+EMB_API void EMB_CALL emb_accessor_destroy(emb_accessor acsr);
 
 /**
  * Initialize mesh.
@@ -292,22 +292,22 @@ EMB_API void EMB_CALL emb_accessor_release(emb_accessor acsr);
  * @param[in] info is mesh parameters info
  * @retval EMB_SUCCESS mesh succefully created
  * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or info are null
- * @sa emb_mesh_release()
+ * @sa emb_mesh_destroy()
  */
 EMB_API enum emb_result EMB_CALL emb_mesh_init(
 	emb_mesh mesh, emb_instance embaland, const struct emb_mesh_info *info);
 
 /**
- * Release mesh.
- * @param mesh is the handle of mesh to release
+ * Destroy embaland mesh.
+ * @param mesh is the handle of mesh to destroy
  */
-EMB_API void EMB_CALL emb_mesh_release(emb_mesh mesh);
+EMB_API void EMB_CALL emb_mesh_destroy(emb_mesh mesh);
 
 /**
- * Release material
- * @param mat is the handle of material to release
+ * Destroy embaland material
+ * @param mat is the handle of material to destroy
  */
-EMB_API void EMB_CALL emb_material_release(emb_material mat);
+EMB_API void EMB_CALL emb_material_destroy(emb_material mat);
 
 #ifdef __cplusplus
 }

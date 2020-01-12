@@ -38,7 +38,7 @@ err:
 	return result;
 }
 
-EMB_API void EMB_CALL emb_accessor_release(emb_accessor acsr)
+EMB_API void EMB_CALL emb_accessor_destroy(emb_accessor acsr)
 {
 	(void)acsr;
 }

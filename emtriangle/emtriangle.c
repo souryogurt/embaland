@@ -91,13 +91,13 @@ int application_main(int argc, char **argv)
 		emb_viewport_render(&viewport, UINT64_MAX);
 	}
 
-	emb_viewport_release(&viewport);
+	emb_viewport_destroy(&viewport);
 err_destoy_surface:
 	vkDestroySurfaceKHR(vulkan, srf, NULL);
 err_destroy_window:
 	glfwDestroyWindow(win);
 err_destroy_scene:
-	scene_release(&triangle_scene);
+	scene_destroy(&triangle_scene);
 err_destroy_emb:
 	emb_destroy(&emb);
 err_destroy_vulkan:

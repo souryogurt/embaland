@@ -34,7 +34,7 @@ err:
 	return result;
 }
 
-EMB_API void EMB_CALL emb_buffer_release(emb_buffer buffer)
+EMB_API void EMB_CALL emb_buffer_destroy(emb_buffer buffer)
 {
 	(void)buffer;
 }

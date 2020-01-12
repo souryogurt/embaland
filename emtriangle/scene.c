@@ -26,7 +26,7 @@ enum emb_result scene_init(emb_instance emb, struct scene *scn)
 				      sizeof(points), sizeof(points[0]),
 				      EMB_ARRAY_BUFFER);
 	if (retval != EMB_SUCCESS) {
-		goto err_release_buffer;
+		goto err_destroy_buffer;
 	}
 	const float min_pos[] = { 0.0F, 0.0F, 0.0F };
 	const float max_pos[] = { 1.0F, 1.0F, 0.0F };
@@ -41,7 +41,7 @@ enum emb_result scene_init(emb_instance emb, struct scene *scn)
 	};
 	retval = emb_accessor_init(&scn->positions, &scn->bview, &pos_info);
 	if (retval != EMB_SUCCESS) {
-		goto err_release_bview;
+		goto err_destroy_bview;
 	}
 
 	scn->tri_attribute = (const struct emb_attribute){
@@ -65,23 +65,23 @@ enum emb_result scene_init(emb_instance emb, struct scene *scn)
 	};
 	retval = emb_mesh_init(&scn->triangle, emb, &mesh_info);
 	if (retval != EMB_SUCCESS) {
-		goto err_release_accessor;
+		goto err_destroy_accessor;
 	}
 	return retval;
-err_release_accessor:
-	emb_accessor_release(&scn->positions);
-err_release_bview:
-	emb_buffer_view_release(&scn->bview);
-err_release_buffer:
-	emb_buffer_release(&scn->buffer);
+err_destroy_accessor:
+	emb_accessor_destroy(&scn->positions);
+err_destroy_bview:
+	emb_buffer_view_destroy(&scn->bview);
+err_destroy_buffer:
+	emb_buffer_destroy(&scn->buffer);
 err:
 	return retval;
 }
 
-void scene_release(struct scene *scn)
+void scene_destroy(struct scene *scn)
 {
-	emb_mesh_release(&scn->triangle);
-	emb_accessor_release(&scn->positions);
-	emb_buffer_view_release(&scn->bview);
-	emb_buffer_release(&scn->buffer);
+	emb_mesh_destroy(&scn->triangle);
+	emb_accessor_destroy(&scn->positions);
+	emb_buffer_view_destroy(&scn->bview);
+	emb_buffer_destroy(&scn->buffer);
 }

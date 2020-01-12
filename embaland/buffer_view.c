@@ -41,7 +41,7 @@ err:
 	return result;
 }
 
-EMB_API void EMB_CALL emb_buffer_view_release(emb_buffer_view bview)
+EMB_API void EMB_CALL emb_buffer_view_destroy(emb_buffer_view bview)
 {
 	(void)bview;
 }

@@ -47,7 +47,7 @@ err:
 	return result;
 }
 
-EMB_API void EMB_CALL emb_mesh_release(emb_mesh mesh)
+EMB_API void EMB_CALL emb_mesh_destroy(emb_mesh mesh)
 {
 	(void)mesh;
 }
