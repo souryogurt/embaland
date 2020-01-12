@@ -25,15 +25,15 @@ extern "C" {
  * @param emb is the handle of the embaland instance
  * @param scn pointer to scene to initialize
  * @retval EMB_SUCCESS scene initialized
- * @sa scene_release()
+ * @sa scene_destroy()
  */
 enum emb_result scene_init(emb_instance emb, struct scene *scn);
 
 /**
- * Release triangle scene.
- * @param scn pointer to scene to release
+ * Destroy triangle scene.
+ * @param scn pointer to scene to destroy
  */
-void scene_release(struct scene *scn);
+void scene_destroy(struct scene *scn);
 
 #ifdef __cplusplus
 }

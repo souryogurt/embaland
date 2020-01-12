@@ -41,4 +41,16 @@ check_PROGRAMS += embaland/list_test
 embaland_list_test_SOURCES = embaland/list_test.c
 embaland_list_test_LDFLAGS = -static
 embaland_list_test_LDADD = libembaland.la $(CGREEN_LIBS)
+
+TESTS += embaland/buffer_test
+check_PROGRAMS += embaland/buffer_test
+embaland_buffer_test_SOURCES = embaland/buffer_test.c
+embaland_buffer_test_LDFLAGS = -static
+embaland_buffer_test_LDADD = libembaland.la $(CGREEN_LIBS)
+
+TESTS += embaland/buffer_view_test
+check_PROGRAMS += embaland/buffer_view_test
+embaland_buffer_view_test_SOURCES = embaland/buffer_view_test.c
+embaland_buffer_view_test_LDFLAGS = -static
+embaland_buffer_view_test_LDADD = libembaland.la $(CGREEN_LIBS)
 endif
