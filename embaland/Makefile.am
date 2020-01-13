@@ -53,4 +53,22 @@ check_PROGRAMS += embaland/buffer_view_test
 embaland_buffer_view_test_SOURCES = embaland/buffer_view_test.c
 embaland_buffer_view_test_LDFLAGS = -static
 embaland_buffer_view_test_LDADD = libembaland.la $(CGREEN_LIBS)
+
+TESTS += embaland/accessor_test
+check_PROGRAMS += embaland/accessor_test
+embaland_accessor_test_SOURCES = embaland/accessor_test.c
+embaland_accessor_test_LDFLAGS = -static
+embaland_accessor_test_LDADD = libembaland.la $(CGREEN_LIBS)
+
+TESTS += embaland/mesh_test
+check_PROGRAMS += embaland/mesh_test
+embaland_mesh_test_SOURCES = embaland/mesh_test.c
+embaland_mesh_test_LDFLAGS = -static
+embaland_mesh_test_LDADD = libembaland.la $(CGREEN_LIBS)
+
+TESTS += embaland/material_test
+check_PROGRAMS += embaland/material_test
+embaland_material_test_SOURCES = embaland/material_test.c
+embaland_material_test_LDFLAGS = -static
+embaland_material_test_LDADD = libembaland.la $(CGREEN_LIBS)
 endif
