@@ -1,7 +1,7 @@
 #ifndef EMBALAND_PLATFORM_H_
 #define EMBALAND_PLATFORM_H_ 1
 /**
- * @file platform.h
+ * @file
  * The header of embaland platform definitions.
  *
  * This header file defines platform specific types and attributes.

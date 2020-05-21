@@ -1,49 +1,67 @@
-/**
- * @file
- * Viewport implementation
- */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
+#include <assert.h>
 #include <stdlib.h>
 
-#include "compiler.h"
-#include "embaland.h"
 #include "viewport.h"
 
-EMB_API enum emb_result EMB_CALL emb_viewport_init(emb_viewport viewport,
-						   emb_instance embaland,
-						   VkSurfaceKHR surface)
+EMB_API emb_result EMB_CALL emb_create_vulkan_viewport(emb_instance embaland,
+						       VkSurfaceKHR surface,
+						       emb_viewport *viewport)
 {
-	enum emb_result result = EMB_SUCCESS;
-	if (embaland == NULL) {
-		result = EMB_ERROR_INITIALIZATION_FAILED;
-		goto err;
+	assert(embaland != NULL);
+	emb_viewport vprt = malloc(sizeof(struct emb_viewport));
+	if (vprt == NULL) {
+		return EMB_ERROR_OUT_OF_HOST_MEMORY;
 	}
-	if (surface == VK_NULL_HANDLE) {
-		result = EMB_ERROR_INVALID_EXTERNAL_HANDLE;
-		goto err;
+	emb_result ret = emb_viewport_init(embaland, surface, vprt);
+	if (ret == EMB_SUCCESS) {
+		*viewport = vprt;
+		return ret;
 	}
-	if (viewport == NULL) {
-		result = EMB_ERROR_INITIALIZATION_FAILED;
-		goto err;
-	}
-
-	viewport->emb = embaland;
-	viewport->surface = surface;
-err:
-	return result;
+	free(vprt);
+	return ret;
 }
 
-EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport)
+EMB_LOCAL emb_result emb_viewport_init(const emb_instance embaland,
+				       VkSurfaceKHR surface,
+				       emb_viewport viewport)
 {
+	(void)embaland;
+	viewport->surface = surface;
+	return EMB_SUCCESS;
+}
+
+EMB_LOCAL void emb_viewport_cleanup(const emb_instance embaland,
+				    emb_viewport viewport)
+{
+	(void)embaland;
 	(void)viewport;
 }
 
-EMB_API enum emb_result EMB_CALL emb_viewport_render(emb_viewport viewport,
-						     uint64_t timeout)
+EMB_API void EMB_CALL emb_destroy_viewport(emb_instance embaland,
+					   emb_viewport viewport)
 {
+	if (viewport != NULL) {
+		emb_viewport_cleanup(embaland, viewport);
+		free(viewport);
+	}
+}
+
+EMB_API void EMB_CALL emb_destroy_surface(VkInstance vulkan,
+					  VkSurfaceKHR surface,
+					  const VkAllocationCallbacks *cb)
+{
+	vkDestroySurfaceKHR(vulkan, surface, cb);
+}
+
+EMB_API emb_result EMB_CALL emb_render_viewport(emb_instance embaland,
+						emb_viewport viewport,
+						uint64_t timeout)
+{
+	(void)embaland;
 	(void)viewport;
 	(void)timeout;
 	return EMB_SUCCESS;

@@ -1,23 +1,21 @@
 #ifndef EMBALAND_EMBALAND_H
 #define EMBALAND_EMBALAND_H 1
+/**
+ * @file
+ * Embaland Application Programming Interface
+ */
 
 #include "platform.h"
-
-#include <vulkan/vulkan_core.h>
 
 /**
  * The embaland API result.
  */
-enum emb_result {
+typedef enum emb_result {
 	EMB_SUCCESS = 0,
 	EMB_ERROR_INITIALIZATION_FAILED = -1,
 	EMB_ERROR_INVALID_EXTERNAL_HANDLE = -2,
-};
-
-enum emb_buffer_target {
-	EMB_ARRAY_BUFFER = 34962,
-	EMB_ELEMENT_ARRAY_BUFFER = 34963,
-};
+	EMB_ERROR_OUT_OF_HOST_MEMORY = -3,
+} emb_result;
 
 /**
  * Opaque embaland instance handle.
@@ -29,167 +27,19 @@ typedef struct emb_instance *emb_instance;
  */
 typedef struct emb_viewport *emb_viewport;
 
-/**
- * Opaque buffer handle.
- */
-typedef struct emb_buffer *emb_buffer;
-
-/**
- * Opaque buffer view handle.
- */
-typedef struct emb_buffer_view *emb_buffer_view;
-
-/**
- * Opaque accessor handle.
- */
-typedef struct emb_accessor *emb_accessor;
-
-/**
- * Opaque material handle.
- */
-typedef struct emb_material *emb_material;
-
-/**
- * Opaque mesh handle.
- */
-typedef struct emb_mesh *emb_mesh;
-
-/**
- * Accessor parameters
- */
-struct emb_accessor_info {
-	/** The offset relative to the start of the buffer view in bytes */
-	uint32_t byte_offset;
-	/** The datatype of components in the attribute */
-	uint32_t comp_type;
-	/** Specifies whether integer data values should be normalized */
-	uint8_t is_normalized;
-	/** The number of attributes referenced by this accessor */
-	uint32_t attrib_count;
-	/** Specifies if the attribute is a scalar, vector, or matrix */
-	uint32_t attrib_type;
-	/** Minimum value of each component in this attribute */
-	const void *min_values;
-	/** Maximum value of each component in this attribute */
-	const void *max_values;
-};
-
-/**
- * Attribute connection
- */
-struct emb_attribute {
-	uint32_t type;
-	emb_accessor data;
-};
-
-/**
- * Primitive parameters
- */
-struct emb_primitive {
-	/** An array of attribute-data connections */
-	const struct emb_attribute *attributes;
-	/** Number of attributes in @a attributes array */
-	uint32_t attributes_count;
-	/** The accessor that contains the indices */
-	emb_accessor indeces;
-	/** The material to apply to this primitive when rendering */
-	emb_material material;
-	/** The type of primitives to render */
-	uint32_t mode;
-	/** An array of Morph Targets */
-	const struct emb_attribute *targets;
-	/** Number of elements in @a targets array */
-	uint32_t targets_count;
-};
-
-/**
- * Mesh parameters
- */
-struct emb_mesh_info {
-	/** An array of primitives, each defining geometry to be rendered */
-	const struct emb_primitive *primitives;
-	/** The number of primitves in @a primitives array */
-	uint32_t primitives_count;
-	/** An array of weights to be applied to the Morph Targets */
-	const float *weights;
-	/** The number of weights in @a weights array */
-	uint32_t weights_count;
-};
-
-#define EMB_ATTRIB_COMPONENT_BYTE 5120
-#define EMB_ATTRIB_COMPONENT_UBYTE 5121
-#define EMB_ATTRIB_COMPONENT_SHORT 5122
-#define EMB_ATTRIB_COMPONENT_USHORT 5123
-#define EMB_ATTRIB_COMPONENT_UINT 5125
-#define EMB_ATTRIB_COMPONENT_FLOAT 5126
-
-#define EMB_ATTRIB_SCALAR 0
-#define EMB_ATTRIB_VEC2 1
-#define EMB_ATTRIB_VEC3 2
-#define EMB_ATTRIB_VEC4 3
-#define EMB_ATTRIB_MAT2 4
-#define EMB_ATTRIB_MAT3 5
-#define EMB_ATTRIB_MAT4 6
-
-#define EMB_MODE_POINTS 0
-#define EMB_MODE_LINES 1
-#define EMB_MODE_LINE_LOOP 2
-#define EMB_MODE_LINE_STRIP 3
-#define EMB_MODE_TRIANGLES 4
-#define EMB_MODE_TRIANGLE_STRIP 5
-#define EMB_MODE_TRIANGLE_FAN 6
-
-#define EMB_ATTRIB_POSITION 0
-#define EMB_ATTRIB_NORMAL 1
-#define EMB_ATTRIB_TANGENT 2
-#define EMB_ATTRIB_TEXCOORD_0 3
-#define EMB_ATTRIB_TEXCOORD_1 4
-#define EMB_ATTRIB_TEXCOORD_2 5
-#define EMB_ATTRIB_TEXCOORD_3 6
-#define EMB_ATTRIB_TEXCOORD_4 7
-#define EMB_ATTRIB_TEXCOORD_5 8
-#define EMB_ATTRIB_TEXCOORD_6 9
-#define EMB_ATTRIB_TEXCOORD_7 10
-#define EMB_ATTRIB_TEXCOORD_8 11
-#define EMB_ATTRIB_TEXCOORD_9 12
-#define EMB_ATTRIB_TEXCOORD_10 13
-#define EMB_ATTRIB_TEXCOORD_11 14
-#define EMB_ATTRIB_TEXCOORD_12 15
-#define EMB_ATTRIB_TEXCOORD_13 16
-#define EMB_ATTRIB_TEXCOORD_14 17
-#define EMB_ATTRIB_TEXCOORD_15 18
-#define EMB_ATTRIB_COLOR_0 19
-#define EMB_ATTRIB_COLOR_1 20
-#define EMB_ATTRIB_COLOR_2 21
-#define EMB_ATTRIB_COLOR_3 22
-#define EMB_ATTRIB_COLOR_4 23
-#define EMB_ATTRIB_COLOR_5 24
-#define EMB_ATTRIB_COLOR_6 25
-#define EMB_ATTRIB_COLOR_7 26
-#define EMB_ATTRIB_COLOR_8 27
-#define EMB_ATTRIB_COLOR_9 28
-#define EMB_ATTRIB_COLOR_10 29
-#define EMB_ATTRIB_COLOR_11 30
-#define EMB_ATTRIB_COLOR_12 31
-#define EMB_ATTRIB_COLOR_13 32
-#define EMB_ATTRIB_COLOR_14 33
-#define EMB_ATTRIB_COLOR_15 34
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * Initialize embaland instance.
+ * Create embaland instance.
  * @param embaland points a emb_instance to initialize
- * @param vulkan is the handle of the vulkan instance to use
  * @retval EMB_SUCCESS embaland instance succefully created
- * @retval EMB_ERROR_INITIALIZATION_FAILED target pointer is null
- * @retval EMB_ERROR_INVALID_EXTERNAL_HANDLE vulkan handle is invalid
+ * @retval EMB_ERROR_OUT_OF_HOST_MEMORY memory allocation failed
+ * @retval EMB_ERROR_INITIALIZATION_FAILED initialization failed
  * @sa emb_destroy()
  */
-EMB_API enum emb_result EMB_CALL emb_init(emb_instance embaland,
-					  VkInstance vulkan);
+EMB_API emb_result EMB_CALL emb_create(emb_instance *embaland);
 
 /**
  * Destroy embaland instance.
@@ -198,116 +48,23 @@ EMB_API enum emb_result EMB_CALL emb_init(emb_instance embaland,
 EMB_API void EMB_CALL emb_destroy(emb_instance embaland);
 
 /**
- * Initialize embaland viewport.
- * @param viewport points to emb_viewport to initialize
- * @param embaland is handle of the embaland instance
- * @param surface is vulkan surface to init viewport on
- * @retval EMB_SUCCESS viewport succefully initialized
- * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
- * @retval EMB_ERROR_INVALID_EXTERNAL_HANDLE surface handle is invalid
- * @sa emb_viewport_destroy()
- */
-EMB_API enum emb_result EMB_CALL emb_viewport_init(emb_viewport viewport,
-						   emb_instance embaland,
-						   VkSurfaceKHR surface);
-
-/**
  * Destroy embaland viewport.
+ * @param embaland is handle of embaland instance
  * @param viewport is the handle of the viewport to destroy
  */
-EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport);
+EMB_API void EMB_CALL emb_destroy_viewport(emb_instance embaland,
+					   emb_viewport viewport);
 
-/** Render viewport.
+/**
+ * Render viewport.
+ * @param embaland is handle of embaland instance
  * @param viewport is handle of the viewport to render
  * @param timeout specifies how long the function can wait in nanoseconds
  * @retval EMB_SUCCESS viewport is successfully rendered
  */
-EMB_API enum emb_result EMB_CALL emb_viewport_render(emb_viewport viewport,
-						     uint64_t timeout);
-
-/**
- * Initialize embaland buffer.
- * @param buffer points to emb_buffer to initialize
- * @param embaland is handle of the embaland instance
- * @param bytes is a pointer to initial buffer's data
- * @param nbytes is the size in bytes of @data
- * @retval EMB_SUCCESS buffer succefully initialized
- * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
- * @sa emb_buffer_destroy()
- */
-EMB_API enum emb_result EMB_CALL emb_buffer_init(emb_buffer buffer,
-						 emb_instance embaland,
-						 const void *bytes,
-						 size_t nbytes);
-/**
- * Destroy embaland buffer.
- * @param buffer is the handle of buffer to destroy
- */
-EMB_API void EMB_CALL emb_buffer_destroy(emb_buffer buffer);
-
-/**
- * Initialize embaland buffer view.
- * @param bview points to emb_buffer_view to initialize
- * @param buffer is handle of the embaland buffer to initialize view for
- * @param offset is offset in bytes in buffer
- * @param nbytes is the size in bytes of the view
- * @param stride is the size in bytes between vertex attributes
- * @param target is the target that the GPU buffer should be bound to
- * @retval EMB_SUCCESS buffer view succefully initialized
- * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or target are null
- * @sa emb_buffer_view_destroy()
- */
-EMB_API enum emb_result EMB_CALL emb_buffer_view_init(
-	emb_buffer_view bview, emb_buffer buffer, size_t offset, size_t nbytes,
-	uint8_t stride, enum emb_buffer_target target);
-/**
- * Destroy embaland buffer view.
- * @param bview is the handle of buffer view to destroy
- */
-EMB_API void EMB_CALL emb_buffer_view_destroy(emb_buffer_view bview);
-
-/**
- * Initialize data accessor.
- * @param acsr points to emb_accessor to initialize
- * @param bview is buffer view to access data from
- * @param[in] info is accessor parameters info
- * @retval EMB_SUCCESS accessor succefully initalized
- * @retval EMB_ERROR_INITIALIZATION_FAILED buffer view handle is NULL
- * @sa emb_accessor_destroy()
- */
-EMB_API enum emb_result EMB_CALL
-emb_accessor_init(emb_accessor acsr, emb_buffer_view bview,
-		  const struct emb_accessor_info *info);
-
-/**
- * Destroy data accessor.
- * @param acsr is the handle of accessor to destroy
- */
-EMB_API void EMB_CALL emb_accessor_destroy(emb_accessor acsr);
-
-/**
- * Initialize mesh.
- * @param mesh points to emb_mesh to initialize
- * @param embaland is handle of the embaland instance
- * @param[in] info is mesh parameters info
- * @retval EMB_SUCCESS mesh succefully created
- * @retval EMB_ERROR_INITIALIZATION_FAILED instance handle or info are null
- * @sa emb_mesh_destroy()
- */
-EMB_API enum emb_result EMB_CALL emb_mesh_init(
-	emb_mesh mesh, emb_instance embaland, const struct emb_mesh_info *info);
-
-/**
- * Destroy embaland mesh.
- * @param mesh is the handle of mesh to destroy
- */
-EMB_API void EMB_CALL emb_mesh_destroy(emb_mesh mesh);
-
-/**
- * Destroy embaland material
- * @param mat is the handle of material to destroy
- */
-EMB_API void EMB_CALL emb_material_destroy(emb_material mat);
+EMB_API emb_result EMB_CALL emb_render_viewport(emb_instance embaland,
+						emb_viewport viewport,
+						uint64_t timeout);
 
 #ifdef __cplusplus
 }
