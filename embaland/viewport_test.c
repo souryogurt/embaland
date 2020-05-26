@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "viewport.h"
+#include "vulkan.h"
 
 #include <cgreen/cgreen.h>
 #include <cgreen/mocks.h>
@@ -36,6 +37,14 @@ Ensure(emb_render_viewport_successes)
 	assert_that(ret, is_equal_to(EMB_SUCCESS));
 }
 
+Ensure(emb_destroy_surface_calls_vulkan)
+{
+	VkInstance vulkan = VK_NULL_HANDLE;
+	VkSurfaceKHR surface = VK_NULL_HANDLE;
+	expect(vkDestroySurfaceKHR);
+	emb_destroy_surface(vulkan, surface, NULL);
+}
+
 int main(int argc, char **argv)
 {
 	(void)(argc);
@@ -44,6 +53,7 @@ int main(int argc, char **argv)
 	add_test(suite, emb_viewport_init_successes);
 	add_test(suite, emb_viewport_cleanup_releases_resources);
 	add_test(suite, emb_render_viewport_successes);
+	add_test(suite, emb_destroy_surface_calls_vulkan);
 	TestReporter *reporter = create_text_reporter();
 	int exit_code = run_test_suite(suite, reporter);
 	destroy_reporter(reporter);

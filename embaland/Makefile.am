@@ -22,7 +22,8 @@ embaland_instance_test_LDADD = libembaland.la $(CGREEN_LIBS)
 
 TESTS += embaland/viewport_test
 check_PROGRAMS += embaland/viewport_test
-embaland_viewport_test_SOURCES = embaland/viewport_test.c
+embaland_viewport_test_SOURCES = embaland/viewport_test.c\
+				 embaland/vulkan_mock.c
 embaland_viewport_test_LDFLAGS = -static
 embaland_viewport_test_LDADD = libembaland.la $(CGREEN_LIBS)
 endif

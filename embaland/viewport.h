@@ -36,7 +36,7 @@ EMB_LOCAL emb_result emb_viewport_init(const emb_instance embaland,
  * @param viewport is the handle of the viewport to cleanup
  */
 EMB_LOCAL void emb_viewport_cleanup(const emb_instance embaland,
-				    emb_viewport viewport);
+				    const emb_viewport viewport);
 
 #ifdef __cplusplus
 }

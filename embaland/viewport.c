@@ -35,7 +35,7 @@ EMB_LOCAL emb_result emb_viewport_init(const emb_instance embaland,
 }
 
 EMB_LOCAL void emb_viewport_cleanup(const emb_instance embaland,
-				    emb_viewport viewport)
+				    const emb_viewport viewport)
 {
 	(void)embaland;
 	(void)viewport;
