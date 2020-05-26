@@ -1,14 +1,21 @@
 #ifndef EMBALAND_EMBALAND_H
 #define EMBALAND_EMBALAND_H 1
+/**
+ * @file
+ * Embaland Application Programming Interface
+ */
 
 #include "platform.h"
-
-#include <vulkan/vulkan_core.h>
 
 /**
  * The embaland API result.
  */
-enum emb_result { EMB_SUCCESS = 0, EMB_ERROR_INITIALIZATION_FAILED = -1 };
+typedef enum emb_result {
+	EMB_SUCCESS = 0,
+	EMB_ERROR_INITIALIZATION_FAILED = -1,
+	EMB_ERROR_INVALID_EXTERNAL_HANDLE = -2,
+	EMB_ERROR_OUT_OF_HOST_MEMORY = -3,
+} emb_result;
 
 /**
  * Opaque embaland instance handle.
@@ -26,12 +33,13 @@ extern "C" {
 
 /**
  * Create embaland instance.
- * @param vulkan is the handle of the vulkan instance to use
- * @param[out] embaland points a emb_instance handle in which the resulting instance is returned
+ * @param embaland points a emb_instance to initialize
  * @retval EMB_SUCCESS embaland instance succefully created
+ * @retval EMB_ERROR_OUT_OF_HOST_MEMORY memory allocation failed
+ * @retval EMB_ERROR_INITIALIZATION_FAILED initialization failed
+ * @sa emb_destroy()
  */
-EMB_API enum emb_result EMB_CALL emb_create(VkInstance vulkan,
-					    emb_instance *embaland);
+EMB_API emb_result EMB_CALL emb_create(emb_instance *embaland);
 
 /**
  * Destroy embaland instance.
@@ -40,30 +48,23 @@ EMB_API enum emb_result EMB_CALL emb_create(VkInstance vulkan,
 EMB_API void EMB_CALL emb_destroy(emb_instance embaland);
 
 /**
- * Create embaland viewport.
- * @param embaland is handle of the embaland instance
- * @param surface is vulkan surface to create viewport on
- * @param[out] viewport points a emb_viewport handle in which the resulting
- *                      viewport is returned
- * @retval EMB_SUCCESS viewport succefully created
- */
-EMB_API enum emb_result EMB_CALL emb_viewport_create(emb_instance embaland,
-						     VkSurfaceKHR surface,
-						     emb_viewport *viewport);
-
-/**
  * Destroy embaland viewport.
+ * @param embaland is handle of embaland instance
  * @param viewport is the handle of the viewport to destroy
  */
-EMB_API void EMB_CALL emb_viewport_destroy(emb_viewport viewport);
+EMB_API void EMB_CALL emb_destroy_viewport(emb_instance embaland,
+					   emb_viewport viewport);
 
-/** Render viewport.
+/**
+ * Render viewport.
+ * @param embaland is handle of embaland instance
  * @param viewport is handle of the viewport to render
  * @param timeout specifies how long the function can wait in nanoseconds
  * @retval EMB_SUCCESS viewport is successfully rendered
  */
-EMB_API enum emb_result EMB_CALL emb_viewport_render(emb_viewport viewport,
-						     uint64_t timeout);
+EMB_API emb_result EMB_CALL emb_render_viewport(emb_instance embaland,
+						emb_viewport viewport,
+						uint64_t timeout);
 
 #ifdef __cplusplus
 }
