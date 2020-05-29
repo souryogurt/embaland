@@ -27,6 +27,7 @@ addons:
 
 env:
   global:
+    - CORE_COUNT=$(nproc || echo 2)
     - LD_LIBRARY_PATH=${TRAVIS_BUILD_DIR}/../local/lib:${LD_LIBRARY_PATH}
 
 install:
@@ -44,7 +45,7 @@ install:
         mkdir build
         cd build
         cmake -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/../local ..
-        make -j $core_count install
+        make -j $CORE_COUNT install
         cd ${TRAVIS_BUILD_DIR}
     - |
         git clone --branch sdk-1.2.135.0 --depth 1 https://github.com/KhronosGroup/Vulkan-Loader.git ${TRAVIS_BUILD_DIR}/../local/src/vulkan-loader
@@ -52,7 +53,7 @@ install:
         mkdir build
         cd build
         cmake -DVULKAN_HEADERS_INSTALL_DIR=${TRAVIS_BUILD_DIR}/../local -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/../local -DBUILD_WSI_WAYLAND_SUPPORT=OFF -DBUILD_WSI_XLIB_SUPPORT=OFF -DBUILD_TESTS=OFF ..
-        make -j $core_count install
+        make -j $CORE_COUNT install
         cd ${TRAVIS_BUILD_DIR}
     - |
         git clone --branch 3.3.2 --depth 1 https://github.com/glfw/glfw.git ${TRAVIS_BUILD_DIR}/../local/src/glfw
@@ -60,7 +61,7 @@ install:
         mkdir build
         cd build
         cmake -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/../local ..
-        make -j $core_count install
+        make -j $CORE_COUNT install
         cd ${TRAVIS_BUILD_DIR}
     - |
         git clone --branch master --depth 1 https://github.com/cgreen-devs/cgreen.git ${TRAVIS_BUILD_DIR}/../local/src/cgreen
@@ -68,7 +69,7 @@ install:
         mkdir build
         cd build
         cmake -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/../local -DGITDIR=../../../.git/modules/cgreen ..
-        make -j $core_count install
+        make -j $CORE_COUNT install
         cd ${TRAVIS_BUILD_DIR}
 
 before_script: autoreconf -i
@@ -79,4 +80,4 @@ script:
     - find . -name '*.o' -print0 | xargs -0 gcov -a -c
     - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
     - git fetch origin
-    - sonar-scanner -Dsonar.cfamily.threads=$core_count
+    - sonar-scanner -Dsonar.cfamily.threads=$CORE_COUNT
