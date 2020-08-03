@@ -4,8 +4,6 @@
 
 #include <stdlib.h>
 
-#include "emtriangle.h"
-
 #include <embaland/embaland.h>
 #include <embaland/vulkan.h>
 #include <GLFW/glfw3.h>
@@ -16,7 +14,7 @@ static emb_instance emb;
 static GLFWwindow *win;
 static emb_viewport viewport;
 
-int application_main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	int ret = EXIT_SUCCESS;
 	if (!glfwInit()) {

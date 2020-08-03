@@ -14,5 +14,5 @@ check_PROGRAMS =
 include embaland/Makefile.am
 
 if HAVE_GLFW
-include emtriangle/Makefile.am
+include samples/Makefile.am
 endif
