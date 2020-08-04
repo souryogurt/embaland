@@ -5,10 +5,11 @@
  * Embaland instance interface
  */
 
-#include "embaland.h"
+#include "platform.h"
 
 #include <vulkan/vulkan_core.h>
 
+struct emb_viewport;
 struct emb_instance {
 	VkInstance vulkan;
 };
@@ -19,18 +20,32 @@ extern "C" {
 
 /**
  * Initialize embaland instance.
- * @param embaland handle of instance to initialize
- * @retval EMB_SUCCESS embaland instance succefully initialized
- * @retval EMB_ERROR_INITIALIZATION_FAILED target pointer is null
+ * @param vulkan handle of Vulkan instance to use
+ * @param embaland points a emb_instance to initialize
+ * @retval VK_SUCCESS embaland instance succefully initialized
  * @sa emb_cleanup()
  */
-EMB_LOCAL emb_result emb_init(emb_instance embaland);
+EMB_API VkResult EMB_CALL emb_init(VkInstance vulkan,
+				   struct emb_instance *embaland);
 
 /**
  * Cleanup embaland resources.
  * @param embaland is the handle of the instance to cleanup
+ * @sa emb_init()
  */
-EMB_LOCAL void emb_cleanup(emb_instance embaland);
+EMB_API void EMB_CALL emb_cleanup(const struct emb_instance *embaland);
+
+/**
+ * Render viewport.
+ * @param embaland is handle of embaland instance
+ * @param viewport is handle of the viewport to render
+ * @param timeout specifies how long the function can wait in nanoseconds
+ * @retval VK_SUCCESS viewport is successfully rendered
+ */
+EMB_API VkResult EMB_CALL
+emb_render_viewport(const struct emb_instance *embaland,
+		    const struct emb_viewport *viewport, uint64_t timeout);
+
 #ifdef __cplusplus
 }
 #endif

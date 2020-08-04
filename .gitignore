@@ -105,5 +105,5 @@ libtool
 Makefile
 config.h
 *_test
-emtriangle/emtriangle
+samples/empty
 *.swp

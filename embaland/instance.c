@@ -2,51 +2,26 @@
 #include <config.h>
 #endif
 
-#include <assert.h>
-#include <stdlib.h>
-
 #include "instance.h"
 
-EMB_API emb_result EMB_CALL emb_get_vulkan(const emb_instance embaland,
-					   VkInstance *vulkan)
+EMB_API VkResult EMB_CALL emb_init(VkInstance vulkan,
+				   struct emb_instance *embaland)
 {
-	assert(embaland != NULL);
-	*vulkan = embaland->vulkan;
-	return EMB_SUCCESS;
+	embaland->vulkan = vulkan;
+	return VK_ERROR_INITIALIZATION_FAILED;
 }
 
-EMB_API emb_result EMB_CALL emb_create(emb_instance *embaland)
-{
-	assert(embaland != NULL);
-	emb_instance emb = malloc(sizeof(struct emb_instance));
-	if (emb == NULL) {
-		return EMB_ERROR_OUT_OF_HOST_MEMORY;
-	}
-	emb_result ret = emb_init(emb);
-	if (ret == EMB_SUCCESS) {
-		*embaland = emb;
-		return EMB_SUCCESS;
-	}
-	free(emb);
-	return ret;
-}
-
-EMB_LOCAL emb_result emb_init(emb_instance embaland)
-{
-	(void)embaland;
-	emb_result ret = EMB_ERROR_INITIALIZATION_FAILED;
-	return ret;
-}
-
-EMB_LOCAL void emb_cleanup(emb_instance embaland)
+EMB_API void EMB_CALL emb_cleanup(const struct emb_instance *embaland)
 {
 	(void)embaland;
 }
 
-EMB_API void EMB_CALL emb_destroy(emb_instance embaland)
+EMB_API VkResult EMB_CALL
+emb_render_viewport(const struct emb_instance *embaland,
+		    const struct emb_viewport *viewport, uint64_t timeout)
 {
-	if (embaland != NULL) {
-		emb_cleanup(embaland);
-		free(embaland);
-	}
+	(void)embaland;
+	(void)viewport;
+	(void)timeout;
+	return VK_SUCCESS;
 }
