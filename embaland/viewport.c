@@ -12,7 +12,7 @@ EMB_API VkResult EMB_CALL emb_viewport_init(VkSurfaceKHR surface,
 }
 
 EMB_API void EMB_CALL emb_viewport_cleanup(const struct emb_instance *embaland,
-					   struct emb_viewport *viewport)
+					   const struct emb_viewport *viewport)
 {
 	(void)embaland;
 	(void)viewport;

@@ -33,7 +33,7 @@ EMB_API VkResult EMB_CALL emb_init(VkInstance vulkan,
  * @param embaland is the handle of the instance to cleanup
  * @sa emb_init()
  */
-EMB_API void EMB_CALL emb_cleanup(struct emb_instance *embaland);
+EMB_API void EMB_CALL emb_cleanup(const struct emb_instance *embaland);
 
 /**
  * Render viewport.
@@ -42,9 +42,9 @@ EMB_API void EMB_CALL emb_cleanup(struct emb_instance *embaland);
  * @param timeout specifies how long the function can wait in nanoseconds
  * @retval VK_SUCCESS viewport is successfully rendered
  */
-EMB_API VkResult EMB_CALL emb_render_viewport(struct emb_instance *embaland,
-					      struct emb_viewport *viewport,
-					      uint64_t timeout);
+EMB_API VkResult EMB_CALL
+emb_render_viewport(const struct emb_instance *embaland,
+		    const struct emb_viewport *viewport, uint64_t timeout);
 
 #ifdef __cplusplus
 }

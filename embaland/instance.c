@@ -11,14 +11,14 @@ EMB_API VkResult EMB_CALL emb_init(VkInstance vulkan,
 	return VK_ERROR_INITIALIZATION_FAILED;
 }
 
-EMB_API void EMB_CALL emb_cleanup(struct emb_instance *embaland)
+EMB_API void EMB_CALL emb_cleanup(const struct emb_instance *embaland)
 {
 	(void)embaland;
 }
 
-EMB_API VkResult EMB_CALL emb_render_viewport(struct emb_instance *embaland,
-					      struct emb_viewport *viewport,
-					      uint64_t timeout)
+EMB_API VkResult EMB_CALL
+emb_render_viewport(const struct emb_instance *embaland,
+		    const struct emb_viewport *viewport, uint64_t timeout)
 {
 	(void)embaland;
 	(void)viewport;
