@@ -6,9 +6,9 @@ libembaland_la_SOURCES = embaland/compiler.h\
 			 embaland/viewport.c
 libembaland_la_LIBADD = $(VULKAN_LIBS)
 
-nobase_include_HEADERS = embaland/embaland.h\
-			 embaland/platform.h\
-			 embaland/vulkan.h
+nobase_include_HEADERS = embaland/instance.h\
+			 embaland/viewport.h\
+			 embaland/platform.h
 if EMB_BUILD_DLL
 libembaland_la_CPPFLAGS = -D_EMB_BUILD_DLL
 endif

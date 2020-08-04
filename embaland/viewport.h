@@ -5,10 +5,11 @@
  * Embaland viewport interface
  */
 
-#include "embaland.h"
+#include "platform.h"
 
 #include <vulkan/vulkan_core.h>
 
+struct emb_instance;
 struct emb_viewport {
 	VkSurfaceKHR surface;
 };
@@ -19,24 +20,22 @@ extern "C" {
 
 /**
  * Initialize viewport.
- * @param embaland is handle of the embaland instance
  * @param surface is vulkan surface to init viewport on
  * @param viewport points to emb_viewport to initialize
- * @retval EMB_SUCCESS viewport succefully initialized
- * @retval EMB_ERROR_INITIALIZATION_FAILED initialization failed
+ * @retval VK_SUCCESS viewport succefully initialized
  * @sa emb_viewport_cleanup()
  */
-EMB_LOCAL emb_result emb_viewport_init(const emb_instance embaland,
-				       VkSurfaceKHR surface,
-				       emb_viewport viewport);
+EMB_API VkResult EMB_CALL emb_viewport_init(VkSurfaceKHR surface,
+					    struct emb_viewport *viewport);
 
 /**
  * Cleanup viewport.
  * @param embaland is handle of embaland instance
  * @param viewport is the handle of the viewport to cleanup
+ * @sa emb_viewport_init()
  */
-EMB_LOCAL void emb_viewport_cleanup(const emb_instance embaland,
-				    const emb_viewport viewport);
+EMB_API void EMB_CALL emb_viewport_cleanup(const struct emb_instance *embaland,
+					   struct emb_viewport *viewport);
 
 #ifdef __cplusplus
 }
