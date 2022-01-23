@@ -71,8 +71,8 @@ jobs:
           CFLAGS="--std=gnu11 -Wall -Wextra -fno-inline --coverage" ./configure --enable-samples --enable-unit-tests
           VERBOSE=1 build-wrapper-linux-x86-64 --out-dir bw-output make check
           find . -name '*.o' -print0 | xargs -0 gcov -a -c
-      - name: Scan usin Sonar-Scanner
-        run: sonar-scanner -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_LOGIN
+      - name: Scan using Sonar-Scanner
+        run: sonar-scanner -Dsonar.login=$SONAR_LOGIN
         env:
           SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
