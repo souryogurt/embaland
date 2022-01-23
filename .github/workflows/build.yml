@@ -1,0 +1,78 @@
+---
+name: Build and test
+on: [push]
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install GLFW's dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libgl1-mesa-dev libmirclient-dev libwayland-dev \
+            libx11-xcb-dev libxcursor-dev libxi-dev libxinerama-dev \
+            libxkbcommon-dev libxrandr-dev
+
+      - name: Install Vulkan Headers
+        run: |
+          git clone --branch sdk-1.2.198.0 --depth 1 https://github.com/KhronosGroup/Vulkan-Headers.git ${HOME}/vulkan-headers
+          cd ${HOME}/vulkan-headers
+          mkdir build
+          cd build
+          cmake ..
+          sudo make install
+
+      - name: Install Vulkan Loader
+        run: |
+          git clone --branch sdk-1.2.198.0 --depth 1 https://github.com/KhronosGroup/Vulkan-Loader.git ${HOME}/vulkan-loader
+          cd ${HOME}/vulkan-loader
+          mkdir build
+          cd build
+          cmake -DBUILD_WSI_WAYLAND_SUPPORT=OFF -DBUILD_WSI_XLIB_SUPPORT=OFF -DBUILD_TESTS=OFF ..
+          sudo make install
+
+      - name: Install GLFW
+        run: |
+          git clone --branch 3.3.6 --depth 1 https://github.com/glfw/glfw.git ${HOME}/glfw
+          cd ${HOME}/glfw
+          mkdir build
+          cd build
+          cmake -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -DBUILD_SHARED_LIBS=ON ..
+          sudo make install
+
+      - name: Install Cgreen
+        run: |
+          git clone --branch 1.4.1 --depth 1 https://github.com/cgreen-devs/cgreen.git ${HOME}/cgreen
+          cd ${HOME}/cgreen
+          mkdir build
+          cd build
+          cmake -DGITDIR=../../../.git/modules/cgreen -DCGREEN_WITH_UNIT_TESTS=OFF ..
+          sudo make install
+
+      - name: Update linker cache
+        run: sudo ldconfig /usr/local/lib
+
+      - name: Install SonarCloud scanner
+        run: |
+          wget -nv https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip -O /tmp/sonar.zip
+          unzip -q /tmp/sonar.zip -d ${HOME}
+          echo "${HOME}/sonar-scanner-4.6.2.2472-linux/bin/" >> $GITHUB_PATH
+          wget -nv https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -O /tmp/wrapper.zip
+          unzip -q /tmp/wrapper.zip -d ${HOME}
+          echo "${HOME}/build-wrapper-linux-x86" >> $GITHUB_PATH
+
+      - name: Test
+        run: |
+          autoreconf -i
+          CFLAGS="--std=gnu11 -Wall -Wextra -fno-inline --coverage" ./configure --enable-samples --enable-unit-tests
+          VERBOSE=1 build-wrapper-linux-x86-64 --out-dir bw-output make check
+          find . -name '*.o' -print0 | xargs -0 gcov -a -c
+      - name: Scan usin Sonar-Scanner
+        run: sonar-scanner -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_LOGIN
+        env:
+          SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

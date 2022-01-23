@@ -3,7 +3,7 @@ embaland
 
 Embaland is yet another rendering library that uses Vulkan API.
 
-[![Build Status](https://travis-ci.com/souryogurt/embaland.svg?branch=master)](https://travis-ci.com/souryogurt/embaland)
+![Build Status](https://github.com/souryogurt/embaland/actions/workflows/build.yml/badge.svg)
 [![Quality Status](https://sonarcloud.io/api/project_badges/measure?project=souryogurt_embaland&metric=alert_status)](https://sonarcloud.io/dashboard?id=souryogurt_embaland)
 
 Features
