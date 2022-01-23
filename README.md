@@ -1,19 +1,16 @@
-embaland
-========
+# embaland
 
 Embaland is yet another rendering library that uses Vulkan API.
 
 [![Build and test](https://github.com/souryogurt/embaland/actions/workflows/build.yml/badge.svg)](https://github.com/souryogurt/embaland/actions/workflows/build.yml)
 [![Quality Status](https://sonarcloud.io/api/project_badges/measure?project=souryogurt_embaland&metric=alert_status)](https://sonarcloud.io/dashboard?id=souryogurt_embaland)
 
-Features
---------
+## Features
 
 - Minimal dependencies
 - Vulkan rendering
 
-Installation
-------------
+## Installation
 
 Install embaland from sources, by running:
 
@@ -30,8 +27,7 @@ make
 make install
 ```
 
-Development
------------
+## Development
 
 To build embaland for development, please use these flags:
 ```sh
@@ -41,14 +37,13 @@ CFLAGS="-Wall -Wextra --std=gnu18 -pedantic -Og -g -fno-inline -fsanitize=addres
 make
 ```
 
-Contribute
-----------
+## Contribute
+
 - Read [How to submit an issue or feature request into tracker](https://github.com/souryogurt/embaland/wiki/How-to-submit-an-issue-or-feature-request)
 - Issue Tracker: https://github.com/souryogurt/embaland/issues
 - Source Code: https://github.com/souryogurt/embaland
 
-Support
--------
+## Support
 
 If you are having issues, please let me know.
 * Egor Artemov <egor.artemov@gmail.com>
