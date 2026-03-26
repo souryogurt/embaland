@@ -147,6 +147,31 @@ Ensure(main_returns_failure_on_viewport_creation_fail)
 	assert_that(application_main(0, NULL), is_equal_to(EXIT_FAILURE));
 }
 
+Ensure(main_returns_failure_on_viewport_render_fail)
+{
+	expect(glfwInit, will_return(1));
+	expect(glfwGetRequiredInstanceExtensions);
+	expect(vkCreateInstance, will_return(VK_SUCCESS));
+	expect(emb_init, will_return(EMB_SUCCESS));
+	expect(scene_init, will_return(EMB_SUCCESS));
+	expect(glfwWindowHint);
+	expect(glfwCreateWindow, will_return(WINDOW));
+	expect(glfwCreateWindowSurface, will_return(VK_SUCCESS));
+	expect(emb_viewport_init, will_return(EMB_SUCCESS));
+	expect(glfwWindowShouldClose, will_return(0));
+	expect(glfwPollEvents);
+	expect(emb_viewport_render,
+	       will_return(EMB_ERROR_INITIALIZATION_FAILED));
+	expect(emb_viewport_destroy);
+	expect(vkDestroySurfaceKHR);
+	expect(glfwDestroyWindow);
+	expect(scene_destroy);
+	expect(emb_destroy);
+	expect(vkDestroyInstance);
+	expect(glfwTerminate);
+	assert_that(application_main(0, NULL), is_equal_to(EXIT_FAILURE));
+}
+
 int main(int argc, char **argv)
 {
 	(void)(argc);
@@ -160,6 +185,7 @@ int main(int argc, char **argv)
 	add_test(suite, main_returns_failure_on_window_creation_fail);
 	add_test(suite, main_returns_failure_on_surface_creation_fail);
 	add_test(suite, main_returns_failure_on_viewport_creation_fail);
+	add_test(suite, main_returns_failure_on_viewport_render_fail);
 	TestReporter *reporter = create_text_reporter();
 	int exit_code = run_test_suite(suite, reporter);
 	destroy_reporter(reporter);

@@ -1,7 +1,7 @@
 #ifndef EMBALAND_BUFFER_VIEW_H
 #define EMBALAND_BUFFER_VIEW_H 1
 
-#include "platform.h"
+#include "embaland.h"
 
 #include <vulkan/vulkan_core.h>
 

@@ -8,9 +8,12 @@
 #include <embaland/mesh.h>
 
 struct scene {
-	struct emb_buffer buffer;
-	struct emb_buffer_view bview;
+	struct emb_buffer vertex_buffer;
+	struct emb_buffer index_buffer;
+	struct emb_buffer_view vertex_bview;
+	struct emb_buffer_view index_bview;
 	struct emb_accessor positions;
+	struct emb_accessor indeces;
 	struct emb_attribute tri_attribute;
 	struct emb_primitive tri_primitive;
 	struct emb_mesh triangle;

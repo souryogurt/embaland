@@ -42,32 +42,28 @@ Ensure(emb_viewport_init_returns_error_on_invalid_pointer)
 	assert_that(result, is_equal_to(EMB_ERROR_INITIALIZATION_FAILED));
 }
 
-Ensure(emb_viewport_init_allocates_new_viewport)
+Ensure(emb_viewport_init_returns_error_on_invalid_vulkan_handle)
 {
 	struct emb_instance emb = { 0 };
 	VkSurfaceKHR surface = ((VkSurfaceKHR)1);
 	struct emb_viewport viewport = { NULL };
 
 	enum emb_result result = emb_viewport_init(&viewport, &emb, surface);
-	assert_that(result, is_equal_to(EMB_SUCCESS));
-	assert_that(viewport.surface, is_equal_to(surface));
-	assert_that(viewport.emb, is_equal_to(&emb));
+	assert_that(result, is_equal_to(EMB_ERROR_INVALID_EXTERNAL_HANDLE));
 }
 
-Ensure(emb_viewport_destroy_frees_resources)
+Ensure(emb_viewport_destroy_accepts_zero_initialized_viewport)
 {
-	struct emb_instance emb = { 0 };
-	VkSurfaceKHR surface = ((VkSurfaceKHR)1);
 	struct emb_viewport viewport = { NULL };
-	emb_viewport_init(&viewport, &emb, surface);
 
 	emb_viewport_destroy(&viewport);
 }
 
-Ensure(emb_viewport_render_always_returns_success)
+Ensure(emb_viewport_render_returns_error_on_invalid_viewport)
 {
 	emb_viewport viewport = NULL;
-	assert_that(emb_viewport_render(viewport, 0), is_equal_to(EMB_SUCCESS));
+	assert_that(emb_viewport_render(viewport, 0),
+		    is_equal_to(EMB_ERROR_INITIALIZATION_FAILED));
 }
 
 int main(int argc, char **argv)
@@ -78,9 +74,9 @@ int main(int argc, char **argv)
 	add_test(suite, emb_viewport_init_returns_error_on_invalid_instance);
 	add_test(suite, emb_viewport_init_returns_error_on_invalid_surface);
 	add_test(suite, emb_viewport_init_returns_error_on_invalid_pointer);
-	add_test(suite, emb_viewport_init_allocates_new_viewport);
-	add_test(suite, emb_viewport_destroy_frees_resources);
-	add_test(suite, emb_viewport_render_always_returns_success);
+	add_test(suite, emb_viewport_init_returns_error_on_invalid_vulkan_handle);
+	add_test(suite, emb_viewport_destroy_accepts_zero_initialized_viewport);
+	add_test(suite, emb_viewport_render_returns_error_on_invalid_viewport);
 	TestReporter *reporter = create_text_reporter();
 	int exit_code = run_test_suite(suite, reporter);
 	destroy_reporter(reporter);
